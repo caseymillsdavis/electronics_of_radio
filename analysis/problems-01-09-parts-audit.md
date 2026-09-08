@@ -3,6 +3,11 @@
 Covers *The Electronics of Radio* Chapter 2 Problems 1–6 (pp. 39–48) and Chapter 3
 Problems 7–9 (pp. 65–70).
 
+**This document says what the book asks for.** For what you can get away with instead —
+substitute values, rescaled frequencies, MCU stand-ins, junk-box parts measured rather than
+assumed — see [substitutions-and-workarounds.md](substitutions-and-workarounds.md). Most of
+the "buy" verdicts below have a workaround.
+
 ## The short answer
 
 **The kit is not a source of breadboard parts, and was never meant to be.** The book keeps
@@ -41,12 +46,17 @@ T and π networks; find `Vo`, `Is`, `Rs`. Pencil and paper. Nothing needed.
 **Your bench supply cannot substitute for the battery.** The whole point of the problem is
 measuring the source's internal resistance from the droop as you load it. A regulated lab
 supply has a source resistance near zero by design — you'd plot a flat line and learn
-nothing. You need a real battery with real internal resistance. A 12 V 0.8 A-hr sealed
-lead-acid (Yuasa NP0.8-12 or any equivalent) is the part the book specifies, and it's also
-a reasonable field battery for the finished radio. Get a float charger with it.
+nothing. You need a real battery with real internal resistance.
 
-**Watch the resistor power rating.** Each 510 Ω across ~12 V dissipates 12²/510 ≈ **0.28 W**,
-which is over the 1/4 W the book calls for. They will get hot, and hot resistors drift, which
+You do *not* need the specified 12 V SLA: the battery is the device under test, so almost any
+alkaline cell or stack works, and a plain **9 V alkaline** is arguably the better subject.
+See [the battery workaround](substitutions-and-workarounds.md#problem-2-the-battery--can-aaa-cells-work)
+— it also removes the resistor-dissipation problem below. The SLA is worth buying only if you
+want a field battery for the finished radio, in which case add a float charger.
+
+**Watch the resistor power rating** *if you use a 12 V source.* Each 510 Ω across ~12 V
+dissipates 12²/510 ≈ **0.28 W**, which is over the 1/4 W the book calls for. (On a 9 V
+battery it's 0.16 W and the issue disappears.) They will get hot, and hot resistors drift, which
 shows up in your plot. Buy 1/2 W or 1 W 510 Ω resistors instead — the experiment doesn't care
 about the package, and it makes the two-minute settling wait the book asks for much better
 behaved.
@@ -243,18 +253,17 @@ before you wind L6 — and L9 (63 turns) later.
 
 For Problems 2–6 you'd be borrowing, not consuming — breadboarding doesn't damage parts. So
 it's *possible* to pull the 0.01 µF caps, a 1N4148, the 1 mH choke and two 150 kΩ resistors
-out of the kit bags, run the experiments and put them back. I'd still buy loose parts:
+out of the kit bags, run the experiments and put them back. Don't:
 
-1. **Three of the eight values simply aren't in the kit** (300 kΩ, 3 kΩ, 2 kΩ), and a fourth
-   is short (510 Ω: need 4, kit has 3). So you're placing an order regardless — the marginal
-   cost of adding the rest is roughly nothing.
-2. **Two of the borrowings are actively risky** — the 1 mH choke and the 2N2222A both go into
-   a circuit the book warns can destroy parts.
-3. **The kit has no spares.** Quantities are exact. A lost 4.7 pF cap or a stretched choke
+1. **The kit has no spares.** Quantities are exact. A lost 4.7 pF cap or a stretched choke
    lead means emailing NM0S, and the through-plated board makes recovery from a wrong-hole
    solder job unpleasant.
-4. **Tolerance.** The kit's ceramic discs aren't the right parts for an experiment whose
-   whole point is measured-vs-calculated agreement.
+2. **Two of the borrowings are actively risky.** The 1 mH choke and the 2N2222A both go into
+   a circuit the book warns can destroy parts.
+3. **The substitutes are things you probably already own.** Every value the kit could supply
+   here is a generic passive; see
+   [substitutions-and-workarounds.md](substitutions-and-workarounds.md). There's no reason to
+   raid a $200 kit for a 0.01 µF capacitor.
 
 Keep the kit bags sealed until Problem 8.
 
