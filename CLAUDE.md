@@ -52,6 +52,33 @@ Workarounds live in
 [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md).
 Keep it current as new problems land.
 
+## What a session here usually looks like
+
+Typical session: **the owner works through one or two problems and their setup**, at the
+bench, with this repo open. Not a big batch of analysis — a problem, the rig for it, and the
+notes that come out of it. Sessions that involve standing up a dev kit as a substitute
+instrument are expected to be common.
+
+**Firmware lives in this repo.** When a problem needs an MCU standing in for an instrument,
+write the code here under `firmware/` and make it buildable and flashable from the repo root
+with one documented command. Don't leave code in chat, in a scratch directory, or in a
+separate project — the whole point is that Problem 5's square-wave source is still here and
+still builds when Problem 23 wants it back.
+
+Practical notes for those sessions:
+
+- **A remote/web Claude Code session has no USB access**, so it can write and build firmware
+  but cannot flash it or read back from the target. Expect to hand the flash step to the
+  owner and have them report what the scope shows. A local session can do the whole loop.
+- **Record the hardware.** The dev kits on the bench aren't yet identified in the inventory
+  table below — when a session picks one up, name the exact board and MCU there, and pin the
+  toolchain in the firmware README so the build is reproducible later.
+- **Firmware here is test equipment**, so it inherits the repo's measure-don't-assume rule:
+  anything that produces or measures an absolute quantity needs its calibration constants
+  written down next to the code, not buried in a magic number.
+
+See [`firmware/README.md`](firmware/README.md) for the layout convention.
+
 ## Bench inventory
 
 | Have | Notes |
@@ -60,7 +87,7 @@ Keep it current as new problems land.
 | Bench power supply | Regulated. Useless for Problem 2 (needs a source with real internal resistance) |
 | Multimeter | Good one. The workhorse for the measure-don't-assume approach |
 | Breadboards | |
-| MCU dev kits | Fair game as substitute instruments |
+| MCU dev kits | Fair game as substitute instruments. **Exact boards not yet recorded — fill this in.** |
 | **Function generator** | **Not yet owned.** Requirements and options in [`analysis/test-equipment.md`](analysis/test-equipment.md) |
 
 Update this table when gear is bought.
@@ -91,6 +118,8 @@ reference/   norcal-40b-parts-list.md  transcribed 40B BOM + suspected errata
 analysis/    problems-01-09-parts-audit.md   per-problem component audit
              substitutions-and-workarounds.md  how to avoid buying things
              test-equipment.md         function generator spec + shopping list
+firmware/    README.md                 layout + toolchain conventions
+             <instrument>/             MCU code standing in for a piece of test gear
 ```
 
 New per-problem analysis extends `analysis/problems-01-09-parts-audit.md` (rename its range

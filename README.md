@@ -22,6 +22,7 @@ the goal.
 | [`analysis/problems-01-09-parts-audit.md`](analysis/problems-01-09-parts-audit.md) | **Main doc.** Every component each of Problems 1–9 needs, checked against the 40B kit. |
 | [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md) | How to run the problems without buying everything — substitute values, rescaled frequencies, MCU stand-ins, and what genuinely can't be faked. |
 | [`analysis/test-equipment.md`](analysis/test-equipment.md) | Function-generator requirements derived from the problems, plus accessories and a shopping list. |
+| [`firmware/`](firmware/README.md) | MCU code standing in for test equipment — built and flashed from this repo. |
 | [`CLAUDE.md`](CLAUDE.md) | Standing context and working agreement — read this first if you're picking the project up. |
 
 ## Bench inventory
