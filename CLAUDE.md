@@ -70,9 +70,9 @@ Practical notes for those sessions:
 - **A remote/web Claude Code session has no USB access**, so it can write and build firmware
   but cannot flash it or read back from the target. Expect to hand the flash step to the
   owner and have them report what the scope shows. A local session can do the whole loop.
-- **Record the hardware.** The dev kits on the bench aren't yet identified in the inventory
-  table below — when a session picks one up, name the exact board and MCU there, and pin the
-  toolchain in the firmware README so the build is reproducible later.
+- **Record the hardware.** The boards are STM32U5G9J-DK1s; open questions about what their
+  silicon can actually do are tracked in [`firmware/README.md`](firmware/README.md#dac-capability-verified-against-the-datasheet).
+  Pin the toolchain in the firmware README when the first project is built.
 - **Firmware here is test equipment**, so it inherits the repo's measure-don't-assume rule:
   anything that produces or measures an absolute quantity needs its calibration constants
   written down next to the code, not buried in a magic number.
@@ -87,7 +87,7 @@ See [`firmware/README.md`](firmware/README.md) for the layout convention.
 | Bench power supply | Regulated. Useless for Problem 2 (needs a source with real internal resistance) |
 | Multimeter | Good one. The workhorse for the measure-don't-assume approach |
 | Breadboards | |
-| MCU dev kits | Fair game as substitute instruments. **Exact boards not yet recorded — fill this in.** |
+| MCU dev kits | **2 × STM32U5G9J-DK1** (STM32U5G9NJ, Cortex-M33 @ 160 MHz). Fair game as substitute instruments — see [`firmware/README.md`](firmware/README.md#target-hardware) |
 | **Function generator** | **Not yet owned.** Requirements and options in [`analysis/test-equipment.md`](analysis/test-equipment.md) |
 
 Update this table when gear is bought.

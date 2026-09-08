@@ -124,9 +124,19 @@ The 1 MHz carrier is not sacred. The problem is built on three timescales:
 
 Parts A and C exist to probe each inequality — A checks that `τ` is short enough to follow
 the audio, C deliberately drops the carrier to 100 kHz so `τ` *stops* being long enough and
-droop appears. **Any set of values preserving those ratios teaches the same thing.** Scaling
-everything down by 10× (100 kHz carrier, τ = 300 µs, 100 Hz modulation, then 10 kHz for part
-C) puts the carrier inside what an MCU DAC can synthesise. See below.
+droop appears. **Any set of values preserving those ratios teaches the same thing.**
+
+Scaled by 10, which is what a 1 MSa/s DAC can synthesise directly at ten samples per cycle:
+
+| | Book | ÷10 |
+|---|---|---|
+| Carrier | 1 MHz | **100 kHz** |
+| `τ = RC` | 30 µs | **300 µs** — 30 kΩ with the 10 nF from Problem 3 |
+| Modulation | 1 kHz | **100 Hz** |
+| Part C carrier | 100 kHz | **10 kHz** |
+
+Both ratios are preserved exactly: `τ / T_carrier = 30`, `T_mod / τ = 33`, and Part C still
+lands at `τ / T_carrier = 3`, which is where the droop becomes visible.
 
 This is also why 3.3 kΩ instead of 3.0 kΩ is a non-event: 33 µs sits in the same place
 between the same two timescales.
@@ -153,20 +163,53 @@ Two mismatches to handle:
   feedthrough-divider method in [test-equipment.md](test-equipment.md#bench-calibration-worth-doing-on-any-generator).
   Or don't bother forcing 50 Ω: measure whatever R you have and use that number.
 
-### AM for Problem 4 — possible, with effort
+### AM for Problem 4 — yes, and better than brute force
 
-Direct synthesis of a 1 MHz AM signal needs a DAC running at ≥10 MSa/s, which is outside most
-MCUs. Three routes, in increasing order of appeal:
+The obvious approach is to synthesise the whole modulated waveform sample by sample. On the
+STM32U5G9 that works but caps the carrier at 100 kHz, because the DAC's characterised
+sampling rate is 1 MSa/s and you need roughly ten samples per carrier cycle. See
+[`../firmware/README.md`](../firmware/README.md#dac-capability-verified-against-the-datasheet)
+for the numbers.
 
-1. **Scale the problem down** (see above) to a 100 kHz carrier. Now an MCU DAC with DMA at
-   ~1 MSa/s gives ~10 points per carrier cycle — marginal, but with a reconstruction filter
-   it's a real AM signal, and you compute the envelope in software so depth is exact and
-   trivially settable to 70% and 100%. This is the cheapest honest path.
-2. **Analog multiplier.** An AD633 fed a carrier (crystal oscillator can, or a DDS module) on
-   one input and `1 + m·cos(ωt)` from the MCU DAC on the other gives you textbook AM at the
-   real 1 MHz. Costs about as much as the multiplier chip; teaches more than either.
-3. **Buy the generator.** Internal AM with settable depth is on the spec sheet of essentially
-   everything, including the cheap DDS boxes.
+**There's a much better trick.** AM is just `carrier × envelope`, and nothing says the
+multiplication has to happen in software:
+
+- Generate the **envelope** with the DAC at a few kSa/s — a 100 Hz sine, which is so far
+  inside the DAC's comfort zone that you get its full 11.3 ENOB and −79 dB THD.
+- Generate the **carrier** with a timer as a square wave. At 160 MHz the U5 makes a 1 MHz
+  square with 160 counts per cycle, so frequency resolution is a non-issue.
+- Multiply them with a **CMOS analog switch** (74HC4066, 74LVC1G66, 74HC4053 — under a
+  dollar) chopping the envelope voltage at the carrier rate.
+
+The output is a square carrier whose amplitude tracks the envelope. **That is real AM at the
+book's real 1 MHz**, with modulation depth set exactly in software, and the DAC never leaves
+its sweet spot.
+
+Does a square carrier break anything? No — an envelope detector charges to the *peak* of
+whatever periodic waveform it sees, and every quantity Problem 4 asks about is a peak:
+
+- **Part A**, τ vs the modulation period: unchanged.
+- **Part B**, the input-to-output voltage difference: still one diode drop below the peak.
+- **Part C**, droop at low carrier frequency: *clearer* with a square carrier, because the
+  discharge happens over a well-defined off-period rather than a sinusoidal one.
+- **Part D**, 100% modulation and overmodulation distortion: unchanged, provided the envelope
+  can actually reach zero — see the buffer trap below.
+
+The harmonic content differs from a sine carrier, which matters for spectrum but not for
+envelope detection. If you want the textbook sine, an AD633 multiplier drops into the same
+place as the analog switch.
+
+**Two hardware constraints from the datasheet that bite whichever route you take:**
+
+- The DAC's output buffer **cannot output below 0.2 V**, so with the buffer enabled you can
+  only reach about 88% modulation and Part D's overmodulation never quite happens. Run the
+  buffer **off** for the full 0-to-VREF+ swing.
+- With the buffer off the DAC's output impedance is 10–16 kΩ, and with it on the minimum load
+  is 5 kΩ — either way it cannot drive Problem 4's 3 kΩ bleeder, especially with a diode
+  drawing transient charging current. **Put a rail-to-rail op-amp follower after the DAC.**
+  It only carries the envelope, so any jellybean part works.
+
+Chain: `DAC (buffer off) → RRIO follower → analog switch (carrier) → detector`.
 
 ### A DDS module for Problems 8 and 9 — partially
 
@@ -224,6 +267,8 @@ protoboard) and are willing to measure things:
 - 10 nF film capacitors, 5% — unless your DMM measures capacitance
 - A few TO-92 NPNs and 1 mH chokes — these are consumable in Problems 5 and 6
 - Non-metallic tuning tool
+- **A CMOS analog switch (74HC4066/74LVC1G66) and a rail-to-rail op-amp** — about a dollar
+  between them, and they turn the STM32 DAC into a proper 1 MHz AM source for Problem 4
 
 **Skip unless you don't have them:** the 510 Ω, 300 kΩ, 3 kΩ and 2 kΩ resistors. Any
 assortment covers these, and measured junk-box parts are better than assumed nominal ones.
