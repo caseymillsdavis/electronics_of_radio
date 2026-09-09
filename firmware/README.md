@@ -26,6 +26,19 @@ Candidates identified so far, none written yet:
 | `siggen-am/` | AM source, frequency-scaled carrier | 4 |
 | `battery-logger/` | Datalogging voltmeter for the polarisation transient | 2 |
 | `freq-counter/` | Frequency counter | 40B VFO alignment |
+| `pulser-tdr/` | 50 ns pulse / fast-edge source for time-domain reflectometry | 10 |
+| `scalar-na/` | Scalar network analyser — DDS sweep + log detector + ADC | 12, 13, 14, 16, 40B alignment |
+
+The last two came out of Chapters 4–6. Rationale for both is in
+[`../analysis/substitutions-and-workarounds.md`](../analysis/substitutions-and-workarounds.md#the-instrument-this-batch-is-really-asking-for-a-scalar-network-analyser);
+the short version is that `pulser-tdr/` is the one instrument where the dev kit beats a bought
+generator outright (a timer tick is 6.25 ns, so a 50 ns pulse is exactly 8 ticks), and
+`scalar-na/` replaces several hundred manual scope readings across Problems 14A, 14C and 14K
+with a serial dump.
+
+`scalar-na/` needs external hardware — an AD9850/AD9851 DDS module and an AD8307 log detector,
+about $15 together — and cannot be finished in a remote session, because its slope and
+intercept have to be calibrated against a known signal on the bench.
 
 ## Conventions
 
@@ -56,6 +69,8 @@ does the measuring, without a firmware reflash between the two roles.
 | Instrument | Peripheral | Binding constraint | Blocked on datasheet? |
 |---|---|---|---|
 | `siggen-square/` | Timer + GPIO | None. 160 MHz timer clock gives 1600 counts per period at 100 kHz — better frequency resolution than a bought generator. | **No — buildable today** |
+| `pulser-tdr/` | Timer + GPIO | **Edge rate into 50 Ω**, not timing. 6.25 ns per tick makes a 50 ns pulse exact; driving a real cable needs an external 74LVC1G17/74AC14 buffer and a measured series resistor. | **No — buildable today** |
+| `scalar-na/` | SPI + ADC + timer | **Calibration, not silicon.** The DDS sets frequency and the log detector sets amplitude; the MCU only sequences and samples. Needs the log detector's slope and intercept measured on the bench. | **No — but needs hardware to finish** |
 | `freq-counter/` | Timer input capture | Accuracy is set by the board's clock source, not the counter. 40B VFO alignment needs ~±500 Hz at 2.1 MHz (±240 ppm), which any crystal beats comfortably. | **No** |
 | `battery-logger/` | ADC | Absolute DC accuracy, not speed. A few samples/second is plenty; the error budget is the voltage reference and the divider, not the converter. | Partly — want ADC offset/INL and reference accuracy |
 | `siggen-am/` | DAC + DMA + timer trigger | **DAC update rate.** Sets how far Problem 4 has to be scaled down in frequency. See below. | **Yes** |

@@ -9,15 +9,17 @@ Radio*** (Cambridge University Press). The book is a lab course: **40 problems**
 ## Two standing facts about how work arrives here
 
 1. **The book is 40 problems long and they arrive incrementally.** The owner photographs
-   pages and uploads them a few problems at a time. As of the last update, **Problems 1–9 have
-   been analysed** (see the tracker below). When new screenshots appear, extend the existing
+   pages and uploads them a few problems at a time. As of the last update, **Problems 1–16
+   have been analysed** (see the tracker below), and Problem 16 only partly — its pages run
+   past what was uploaded. When new screenshots appear, extend the existing
    docs rather than starting parallel ones — the per-problem tables and the shopping list are
    meant to grow.
 2. **The radio is a NorCal 40B, not the book's NorCal 40A.** The 40A kit is discontinued. The
-   40B (NM0S Electronics) is a revision of the same design and so far maps well, but every
+   40B (NM0S Electronics) is a revision of the same design and mostly maps well, but every
    problem that solders to the board needs checking against
    [`reference/norcal-40b-vs-40a.md`](reference/norcal-40b-vs-40a.md) before it's assumed to
-   transfer.
+   transfer. **Problem 13 is the standing proof that this check is not a formality** — the 40B's
+   harmonic filter keeps all six designators and changes every value.
 
 ## Who this is for
 
@@ -83,12 +85,14 @@ See [`firmware/README.md`](firmware/README.md) for the layout convention.
 
 | Have | Notes |
 |---|---|
-| Oscilloscope | "very nice"; 10:1 probes. Confirm input C and probe C — Problems 3 and 9 need them as inputs |
+| Oscilloscope | "very nice"; 10:1 probes. Confirm input C and probe C — Problems 3, 9, 12 and 16 need them as inputs. Also confirm: 10 ns/div timebase (P10) and a bandwidth-limit filter (P14) |
 | Bench power supply | Regulated. Useless for Problem 2 (needs a source with real internal resistance) |
 | Multimeter | Good one. The workhorse for the measure-don't-assume approach |
 | Breadboards | |
 | MCU dev kits | **2 × STM32U5G9J-DK1** (STM32U5G9NJ, Cortex-M33 @ 160 MHz). Fair game as substitute instruments — see [`firmware/README.md`](firmware/README.md#target-hardware) |
-| **Function generator** | **Not yet owned.** Requirements and options in [`analysis/test-equipment.md`](analysis/test-equipment.md) |
+| **Function generator** | **Not yet owned.** Requirements and options in [`analysis/test-equipment.md`](analysis/test-equipment.md). Chapters 4–6 added a **pulse-mode** requirement that can rule models out — check minimum pulse width before ordering |
+| **Coax** | **Not yet owned.** Problems 10 and 12 need 10–20 m of RG58/U with BNC plugs |
+| **Circuit simulator** | Problems 13, 14 and 16 call for *Puff*. Free alternatives in [`analysis/test-equipment.md`](analysis/test-equipment.md#puff-and-what-to-use-instead) |
 
 Update this table when gear is bought.
 
@@ -115,14 +119,14 @@ CLAUDE.md                              this file
 README.md                              orientation and index
 reference/   norcal-40b-parts-list.md  transcribed 40B BOM + suspected errata
              norcal-40b-vs-40a.md      where the 40B differs from the book's radio
-analysis/    problems-01-09-parts-audit.md   per-problem component audit
+analysis/    problems-01-16-parts-audit.md   per-problem component audit
              substitutions-and-workarounds.md  how to avoid buying things
-             test-equipment.md         function generator spec + shopping list
+             test-equipment.md         function generator spec, simulator, shopping list
 firmware/    README.md                 layout + toolchain conventions
              <instrument>/             MCU code standing in for a piece of test gear
 ```
 
-New per-problem analysis extends `analysis/problems-01-09-parts-audit.md` (rename its range
+New per-problem analysis extends `analysis/problems-01-16-parts-audit.md` (rename its range
 as it grows) rather than creating a file per problem.
 
 ## Problem tracker
@@ -138,7 +142,14 @@ as it grows) rather than creating a file per problem.
 | 7 | 3 Phasors | Parallel-to-series conversion | no (paper) | ✅ |
 | 8 | 3 Phasors | Series resonance | **yes** — C1, L1 | ✅ |
 | 9 | 3 Phasors | Parallel resonance | **yes** — C37, C38, C39, L6 | ✅ |
-| 10–40 | — | not yet uploaded | — | ⬜ |
+| 10 | 4 Transmission lines | Coaxial cable | no — bench coax | ✅ |
+| 11 | 4 Transmission lines | Waves | no (paper) | ✅ |
+| 12 | 4 Transmission lines | Resonance | no — bench coax | ✅ |
+| 13 | 5 Filters | Harmonic filter | **yes** — L7, L8, C45, C46, C47, J1 | ✅ ⚠️ 40B values differ |
+| 14 | 5 Filters | IF filter | **yes** — X1–X4, C9–C13, L4, C14 | ✅ |
+| 15 | 6 Transformers | Driver transformer | **yes** — T1, R14 | ✅ |
+| 16 | 6 Transformers | Tuned transformers | **yes** — T2, T3, C2, C4 | 🟡 pages incomplete |
+| 17–40 | — | not yet uploaded | — | ⬜ |
 
 ## Git
 

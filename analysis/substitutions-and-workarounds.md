@@ -1,7 +1,7 @@
 # Substitutions and workarounds
 
-How to run Problems 1–9 without buying everything. Companion to the
-[parts audit](problems-01-09-parts-audit.md), which says what the book asks for; this says
+How to run Problems 1–16 without buying everything. Companion to the
+[parts audit](problems-01-16-parts-audit.md), which says what the book asks for; this says
 what you can get away with instead.
 
 ## Two principles that collapse most of the shopping list
@@ -143,6 +143,216 @@ between the same two timescales.
 
 ---
 
+## Problem 10: you do not need an antenna, and you may not need the transformer
+
+### Part A — the 50 ns pulse is not sacred
+
+What part A actually needs is a pulse **short compared with the round trip**, so the incident
+pulse on channel 1 has finished before its reflection arrives. On 10 m of coax the round trip
+is about 100 ns, so a 50 ns pulse fits with room to spare — but so does an 80 ns one, and a
+longer cable widens the window further. If the generator you want has a minimum pulse width of
+80 or 100 ns, **buy 20 m of coax instead of 10 m** and the constraint evaporates. (It also
+halves the resonant frequency in Problem 12, which makes that measurement easier too.)
+
+**Better still: don't use a pulse at all.** A real time-domain reflectometer sends a *step*,
+not a pulse, and looks at the reflection riding on top of it. Drive the cable with a 20 kHz
+square wave and you get the same delay measurement from the edge, with two advantages:
+
+- Every generator has a square wave, so there is no pulse-width spec to satisfy. The **TTL/sync
+  output** most generators provide is usually the fastest edge in the box — the FY6900's is
+  spec'd at 10 ns, which is sharper than its main output.
+- Part D — the open-circuited line — is *clearer* with a step. A pulse shows you a second bump;
+  a step shows you the voltage doubling and staying there, which is the thing the problem wants
+  you to interpret.
+
+Amplitude is not critical either. Part A measures a **time**, and part C measures a **ratio**.
+3.3 V works as well as 5 V.
+
+### Part B — any coax stands in for the antenna cable
+
+Part B is a length measurement on a cable whose length you supposedly don't know. If there's no
+antenna up yet, use any offcut of coax with its far end left open, deduce the length from the
+delay, then **check it with a tape measure**. That is strictly a better experiment than the
+book's: you get to find out whether the method is right, instead of taking its word.
+
+Two spare metres of RG58 with one BNC on it is enough. The 40B's own feedline is the eventual
+subject anyway.
+
+### Problem 10C: measuring Z0 without building the box
+
+The book's fixture — a 1:1 transformer so a 1 Ω current-sensing resistor can sit in series
+without shorting the scope ground — is the only thing in this chapter you'd have to build.
+Three ways round it, cheapest first.
+
+**1. The source-divider method (no parts, uses what you already measured).**
+
+During the first round trip, before any reflection returns, the cable's input looks like a pure
+`Z0`. So it forms a plain divider with the generator's own source resistance:
+
+    V_in = V_oc × Z0 / (Rs + Z0)      ⟹      Z0 = Rs × V_in / (V_oc − V_in)
+
+Measure `V_oc` (generator into the scope alone, high-Z) and `V_in` (generator into the cable,
+read at the tee) and you're done. `Rs` is the reference resistor, and you were already told to
+measure it in
+[the bench calibration](test-equipment.md#bench-calibration-worth-doing-on-any-generator) —
+which is the same Thevenin measurement, so this costs nothing new. One channel, one tee.
+
+**2. The null method (one part, and the DMM does the work).**
+
+Terminate the far end with a **carbon or cermet potentiometer** — 100 Ω is a good value — and
+adjust it until the reflected pulse disappears into the baseline. A matched line has no
+reflection, so at the null the pot *is* `Z0`. Unclip it and measure it with the multimeter.
+
+This is the most satisfying version of the experiment and the most in the spirit of this repo:
+the answer comes out as a DMM reading rather than a scope estimate, and nulls are far easier to
+judge by eye than amplitudes. Use a **non-wirewound** pot and keep the leads stubby — at these
+edge rates a wirewound pot is an inductor.
+
+**3. Build the book's fixture (two parts, and you'll want it later anyway).**
+
+A 1:1 wideband transformer is a few bifilar turns of #26 on a small #43 ferrite — an FT37-43 or
+a BN-43-2402 binocular core, a dollar or two. Six to ten bifilar turns gives you flat response
+from well under 1 MHz to well over 100 MHz, which covers a 50 ns pulse comfortably. The 1 Ω
+resistor can be anything you can measure; two 2 Ω in parallel is fine, and the "metal box" is
+any grounded enclosure — an Altoids tin with BNCs in it is the traditional answer.
+
+**Do not use the kit's FT37-43.** That core is T1, and Problem 15 needs it.
+
+Current-sensing transformers are genuinely useful test gear afterwards, so this is the option
+to pick if you want the thing rather than just the answer.
+
+---
+
+## Problem 12: any cable length works
+
+The measurement is `f₀ = v/4l` on an open-circuited line, so the resonance moves with whatever
+cable you have. 20 m → 2.5 MHz, 10 m → 5 MHz, 5 m → 10 MHz. All are inside the range
+Problems 8 and 9 already demanded of the generator, so **there is nothing to buy and nothing
+to scale**.
+
+Longer is mildly better: it lowers `f₀`, raises the total loss, and therefore deepens the
+minimum you're hunting in part B. If you're buying coax for Problem 10 anyway, buying 20 m
+rather than 10 m costs a few dollars and makes both problems easier.
+
+The one thing you cannot substitute is the **scope's input capacitance** in part C — that's
+the quantity being measured against. Look it up (it's usually printed by the input jack) rather
+than guessing, and expect 13–20 pF.
+
+---
+
+## Problem 14: crystal spacers, bare wire, and the can grounds
+
+Three small kit gaps, none of them a blocker.
+
+**Plastic crystal spacers** — Appendix A doesn't list any. Their whole job is to keep the metal
+can off the board and off the leads. Substitute: a punched disc of thin polyester or Kapton
+tape, a slice of heatshrink slid down each lead, or a scrap of the anti-static foam the ICs
+arrive in. Anything insulating and about a millimetre thick.
+
+**Bare #22 wire** for connecting the crystal cans to ground — the kit ships #26 and #28
+*enamelled* wire only, and enamel is exactly what you don't want here. Strip a length of solid
+22 AWG hookup wire, or use a cut-off resistor lead (they're usually 0.6 mm ≈ #22 and they solder
+beautifully). You need bare #22 again in Problem 16, so cut a few extra.
+
+**The ground hole between the crystals may not exist on the 40B.** The book relies on a small
+hole in the 40A board between X2 and X3. If the 40B doesn't have one, ground the can wire to any
+convenient ground pad or to the board-edge ground the manual uses elsewhere — the point is
+simply that the cans must not float, not where the wire lands.
+
+Take the book's soldering advice seriously either way: get the can tops properly hot before
+applying solder, or the bead lifts off.
+
+---
+
+## Problem 14K: 60 dB of dynamic range at 4.9 MHz
+
+**This is the hardest measurement in the batch, and the only place in Chapters 4–6 where a
+workaround is close to mandatory.**
+
+Part K asks for a loss plot 60 dB deep. With a 2.0 Vpp drive and a filter whose minimum loss is
+a few dB, the top of the plot is a few hundred millivolts at the 200 Ω load — so the bottom of
+the plot is **sub-millivolt at 4.9 MHz**. No general-purpose scope reads that off the screen.
+The book half-admits this by having you switch in a 10 MHz filter and by making the plot
+relative.
+
+Four options, in increasing order of how much they help.
+
+**1. Scope averaging (free).** The signal is periodic and coherent; the noise isn't. Averaging
+16–64 acquisitions buys you roughly 12–18 dB of noise floor. It needs a rock-steady trigger, so
+**use the generator's sync output into external trigger** rather than triggering on the tiny
+signal itself — which won't work at all once you're deep in the stop band. You already have the
+sync cable on the accessories list for Problems 3 and 4.
+
+**2. The scope's FFT (free).** Reading the amplitude of one bin at the drive frequency rejects
+everything outside a narrow bandwidth, which is precisely the problem. On a modern scope with
+FFT averaging this is often worth another 10–20 dB over a time-domain reading, and it degrades
+gracefully — you can see the noise floor you're approaching.
+
+**3. An AD8307 logarithmic detector (a few dollars, and the right answer).** The AD8307 is a
+DC-to-500 MHz log amp with about **92 dB of range** and an output of roughly 25 mV/dB. Feed it
+the filter output, read the DC output with the multimeter, and the entire 60 dB plot becomes a
+sequence of comfortable DC voltages — about 1.5 V of span. Modules are ubiquitous in QRP
+circles.
+
+Two things to get right, because this is test equipment and inherits the
+measure-don't-assume rule:
+
+- **Calibrate the slope and intercept yourself.** Feed it known levels from the generator
+  (which you can set accurately at the top of the range) and fit `V_out = m·P_dBm + c`. Write
+  `m` and `c` down next to wherever you use them. The datasheet's typical values are a starting
+  point, not a calibration.
+- **Mind the input impedance.** The AD8307 presents about 1.1 kΩ; the filter wants to see
+  200 Ω. Keep the 200 Ω load resistor in place and let the detector sit across it, so the
+  filter's termination is still what the design assumes.
+
+**4. The same detector plus an MCU and a DDS module — a scalar network analyser.** At which
+point part K, part A's six-crystal hunt, and Problem 13A and 16A all stop being manual work.
+See below.
+
+---
+
+## The instrument this batch is really asking for: a scalar network analyser
+
+Look at what Chapters 4–6 keep demanding:
+
+| | Sweep | Points | By hand? |
+|---|---|---|---|
+| P12B/D | resonance and √2 bandwidth near 5 MHz | tens | tolerable |
+| P13A | loss at 7 and 14 MHz | 2 | trivial |
+| **P14A** | find `f₀` to 1 Hz, **six times** | hundreds | grim |
+| **P14C** | `fu`, `fl` around a ~200 Hz-wide dip | dozens | grim |
+| **P14K** | 2,500 Hz span at 50 Hz steps, 60 dB deep | 50+ | grim, and at the edge of what a scope can read |
+| P16A | maximum output, then 3-dB bandwidth at 7 MHz | tens | tolerable |
+
+Three of those are hundreds of manual readings of a millivolt-level signal. That is exactly the
+job an **AD9850/AD9851 DDS module + AD8307 log detector + one of the STM32 boards** does, for
+something like $15 in parts:
+
+- **DDS** — an AD9850 clocked at 125 MHz has a tuning resolution of `125e6 / 2³² = 0.029 Hz`, so
+  Problem 14's 1 Hz steps are three orders of magnitude inside its capability. SPI-driven, and
+  the repo
+  [already planned to buy one](#a-dds-module-for-problems-8-and-9--partially) for Problems 8
+  and 9 and the 40B's alignment.
+- **Log detector** — turns 60 dB into 1.5 V, as above.
+- **MCU** — steps the DDS, reads the ADC, dumps `frequency, dBm` over the serial port. The plot
+  is then a two-line script instead of an evening with graph paper.
+
+**What it does not give you** is absolute frequency accuracy: the AD9850 module's 125 MHz clock
+is a plain crystal oscillator, ±20–50 ppm, which is ±100–250 Hz at 4.9 MHz. That sounds fatal
+for Problem 14 and isn't, because **everything Problem 14 computes is a difference or a ratio**
+— crystal-to-crystal matching, `Δf = fu − fl`, and an `L·C` product checked against your own
+measured `f₀`. A constant offset cancels out of all of them. What matters is **stability over
+the session**, so let it warm up and re-measure the first crystal last as a drift check. If you
+later want absolute accuracy, calibrate the module's clock against anything you trust and store
+the correction as a constant — written down, per the
+[firmware conventions](../firmware/README.md#conventions).
+
+This is the obvious next firmware project in this repo, and it serves five problems plus the
+40B's alignment. It isn't written yet — it needs bench access to calibrate, and a remote session
+can't flash the board.
+
+---
+
 ## Where the MCU dev kits genuinely help
 
 ### Square waves for Problems 3, 5 and 6 — yes
@@ -211,6 +421,31 @@ place as the analog switch.
 
 Chain: `DAC (buffer off) → RRIO follower → analog switch (carrier) → detector`.
 
+### The 50 ns pulse for Problem 10 — yes, and better than a budget generator
+
+This is the one place where the dev kit beats a bought instrument outright. At 160 MHz a timer
+tick is **6.25 ns**, so a 50 ns pulse is 8 ticks and a 20 kHz repetition rate is 8,000 — both
+exact, with no jitter beyond the crystal's own. A generator with an 80 ns minimum pulse width
+cannot do this at all; the MCU does it to the tick.
+
+Three things to handle:
+
+- **Edge rate.** Set the GPIO to its highest output-speed setting. You want a rise time short
+  compared with the 50 ns pulse, which the pin will manage into a light load — but 50 Ω is not
+  a light load, so drive through a **74LVC1G17 or 74AC14 buffer** rather than straight off the
+  pin. This is the same buffer the repo already recommends for
+  [Problem 5's square waves](#square-waves-for-problems-3-5-and-6--yes).
+- **Source impedance.** Add a series resistor to bring buffer plus resistor to 50 Ω, then
+  measure the total — don't assume it. If you use the
+  [source-divider method](#problem-10c-measuring-z0-without-building-the-box) for part C, this
+  resistance *is* your reference standard, so it needs to be a measured number.
+- **Amplitude.** 3.3 V instead of 5 V. Part A measures a time and part C measures a ratio, so
+  this changes nothing.
+
+Worth doing even if you buy a generator with pulse mode: it's an hour's work, it's the natural
+first project for `firmware/`, and it gives you a reference edge whose timing you can trust
+absolutely.
+
 ### A DDS module for Problems 8 and 9 — partially
 
 An AD9850/AD9851 module (a few dollars, ubiquitous in QRP circles) gives clean sine output
@@ -220,7 +455,13 @@ procedure asks for.
 
 What it doesn't give you: calibrated amplitude, a defined 50 Ω source, or the ~20 Vpp
 open-circuit that Problems 8F and 9F want. So it's a frequency source, not a substitute for a
-function generator. If you go this route, the through-reference sweep in
+function generator.
+
+**It becomes much more than that in Chapter 5.** Paired with a log detector it turns into the
+[scalar network analyser](#the-instrument-this-batch-is-really-asking-for-a-scalar-network-analyser)
+that Problems 13A, 14A, 14C, 14K and 16A all want, and its 0.03 Hz tuning resolution is what
+makes Problem 14's 1 Hz steps possible at all. If you were on the fence about buying one for
+Problems 8 and 9, Chapter 5 settles it. If you go this route, the through-reference sweep in
 [test-equipment.md](test-equipment.md#bench-calibration-worth-doing-on-any-generator) stops
 being optional — it's the only thing that makes Problem 8E's response plot mean anything.
 
@@ -245,7 +486,16 @@ JFET/FET follower rather than hanging an MCU pin off the tank.
   either — but the through-reference sweep turns it into a procedure instead of a purchase.
 - **The kit's own parts** for Problems 8 and 9: C1, L1, C37, C38, C39 and L6 are the NorCal
   40B's actual components, soldered to the actual board. Nothing to substitute; that's the
-  point of those problems.
+  point of those problems. The same goes for L7, L8, C45–C47 and J1 (Problem 13); X1–X4,
+  C9–C14 and L4 (Problem 14); T1 and R14 (Problem 15); and T2, T3, C2 and C4 (Problem 16).
+- **A length of coax, for Problems 10 and 12.** There is no substitute for a transmission
+  line, and the kit contains none. It is also the cheapest item in this batch.
+- **The 40B schematic, for Problem 13.** Not a purchase — it's Appendix D of a manual you
+  already have — but the problem cannot be done correctly without knowing which end of an
+  asymmetric filter faces the power amplifier.
+- **Some way of reading 60 dB of dynamic range at 4.9 MHz** for Problem 14K. Scope averaging or
+  an FFT may just get you there; a log detector definitely does. What you cannot do is read
+  sub-millivolt signals off a scope screen and call it a measurement.
 
 ---
 
@@ -272,3 +522,30 @@ protoboard) and are willing to measure things:
 
 **Skip unless you don't have them:** the 510 Ω, 300 kΩ, 3 kΩ and 2 kΩ resistors. Any
 assortment covers these, and measured junk-box parts are better than assumed nominal ones.
+
+### Added by Chapters 4–6
+
+**Actually necessary:**
+
+- **10 m (or better, 20 m) of RG58/U with BNC connectors** — Problems 10 and 12. The only new
+  consumable in three chapters, and buying the longer reel relaxes the pulse-width requirement
+  in Problem 10A and lowers the resonant frequency in Problem 12.
+- **A little bare #22 wire** — Problems 14 and 16. Stripped solid hookup wire or cut-off
+  resistor leads do fine.
+- **150 Ω, 200 Ω, 1 kΩ and 1.5 kΩ resistors**, temporary and discarded — Problems 14, 15, 16.
+  Tolerance is irrelevant; measure whatever you fit. Any assortment already covers these.
+- **A simulator** — Problems 13, 14, 16. Free; see
+  [test-equipment.md](test-equipment.md#puff-and-what-to-use-instead).
+
+**Worth buying, cheap, removes a genuine dead end:**
+
+- **An AD8307 log-detector module** (~$5–10) — makes Problem 14K's 60 dB plot a DC voltage
+  reading instead of a fight with the scope's noise floor.
+- **An AD9850/AD9851 DDS module** (~$5) — was optional for Problems 8 and 9; Chapter 5 makes it
+  the difference between an automated sweep and several hundred manual readings.
+- **A 100 Ω carbon or cermet potentiometer** — the null method for Problem 10C, which replaces
+  the book's transformer-and-metal-box fixture with a DMM reading.
+
+**Only if you want the book's exact fixture:** an FT37-43 or BN-43-2402 ferrite core and a 1 Ω
+resistor for Problem 10C's current transformer. Two of the three alternatives need no parts, so
+buy this because current transformers are useful, not because the problem forces you to.

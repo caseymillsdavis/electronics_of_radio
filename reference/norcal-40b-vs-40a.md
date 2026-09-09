@@ -10,9 +10,10 @@ limited to what the book says out loud.
 
 ## The good news: reference designators survived
 
-The 40B kept the 40A's designators for the two blocks Problems 8 and 9 use, and kept the
-same topology. This is not a coincidence — the 40B is a revision of the same design, not a
-clean-sheet radio.
+The 40B kept the 40A's designators for every block Problems 8–16 touch, and mostly kept the
+values too. This is not a coincidence — the 40B is a revision of the same design, not a
+clean-sheet radio. The one place the values genuinely part company is the transmit harmonic
+filter of Problem 13.
 
 ### RF filter — Problem 8 (series resonance)
 
@@ -45,7 +46,7 @@ to the buffer.
 **Consequences for Problem 9:** use N = 30 in part B, and 4.7 pF for C37 in part A. Your
 measured `f0` in 9A will land lower than a 40A builder's, and C39 in 9C will sit further from
 its maximum. Everything the problem asks you to do still works — see the range check in the
-[parts audit](../analysis/problems-01-09-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims).
+[parts audit](../analysis/problems-01-16-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims).
 
 ### Frequency plan
 
@@ -58,6 +59,113 @@ Identical, so Problem 9's "difference frequency at 2.8 MHz" still applies:
 | Sum (transmit) | 7.0 MHz | 7.000 MHz |
 | Difference (rejected) | 2.8 MHz | 2.830 MHz |
 | IF | — | 4.915 MHz, 4-pole Cohn crystal filter |
+
+### Harmonic filter — Problem 13 (low-pass) — **the one real divergence**
+
+The book: *"a low-pass ladder filter... consisting of the toroidal inductors L7 and L8 and the
+disk capacitors C45, C46, and C47"*, with C45 = 330 pF, C46 = 820 pF, C47 = 330 pF, and both
+inductors 18 turns of #26 on a T37-2.
+
+The 40B keeps all six designators and changes every value:
+
+| | 40A (per the book) | 40B (Appendix A) |
+|---|---|---|
+| C45 | 330 pF disk | **390 pF** NP0 200 V, `391` |
+| C46 | 820 pF disk | **1000 pF** NP0 200 V, `102` |
+| C47 | 330 pF disk | **1000 pF** NP0 200 V, `102` |
+| L7 | T37-2, **18 t** #26, 30 cm | T37-2, **15 t** #26, 24 cm |
+| L8 | T37-2, **18 t** #26, 30 cm | T37-2, **12 t** #26, 20 cm |
+| Nominal L7 | 4.0 nH/t² × 18² = 1.30 µH | 4.0 nH/t² × 15² = **0.90 µH** (manual agrees) |
+| Nominal L8 | 4.0 nH/t² × 18² = 1.30 µH | 4.0 nH/t² × 12² = **0.58 µH** (manual agrees) |
+
+**Consequences for Problem 13:** the method survives intact and every numerical answer moves.
+The 40B's filter is a lower-impedance design — `√(L/C)` for the middle section is ~30 Ω against
+the 40A's ~40 Ω — which is what you would expect of a radio built to make more power off the
+same supply.
+
+**One thing you must look up rather than assume: which end is which.** Appendix A lists values,
+not order, and the 40B's filter is asymmetric (390 / 1000 / 1000). Depending on which capacitor
+faces the power amplifier, the impedance the filter presents to it differs by more than a
+factor of five — and finding that impedance is Problem 13D, with 13E asking you to halve it. Get
+Appendix B (placement) and Appendix D (schematic) out before soldering. Numbers in the
+[parts audit](../analysis/problems-01-16-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims).
+
+### IF filter — Problem 14 (Cohn crystal filter) — matches
+
+| | 40A (per the book) | 40B |
+|---|---|---|
+| Topology | 4-element Cohn, X1–X4 | **4-pole Cohn** (manual, *Specifications*) |
+| C9–C13 | 270 pF | ✓ 270 pF NP0 5%, `271` |
+| Crystals | 6 matched, 4.9135 MHz | ✓ 6 × HC-49, **4.915 MHz** |
+| L4 (matching) | 18 µH | ✓ 18 µH molded, brown-grey-black |
+| C14 (matching) | 47 pF | ✓ 47 pF NP0 5%, `470` |
+| Detector/mixer IC | SA602AN | SA612 or NE602 — same family |
+
+**Two things to carry into the problem.** First, **start the frequency hunt at 4,915,000 Hz**,
+not the book's 4,913,500 — the 1.5 kHz offset is a long walk at 1 Hz steps. Second, **the book
+assumes the crystals arrive matched to 20 Hz** because Wilderness Radio sorted them for the
+40A; the 40B manual doesn't say whether NM0S does. Problem 14A is itself the sorting procedure,
+so measure all six, use the closest four for X1–X4, and put the outliers in the mixer
+oscillators where the spread doesn't matter.
+
+Part I quotes an upper-sideband spur 1,240 Hz above the signal — twice the 40A's 620 Hz CW
+offset. Check the 40B's offset in *Specifications* before quoting a rejection figure at that
+frequency.
+
+The kit also has **no plastic crystal spacers** and **no bare #22 wire** for grounding the
+crystal cans; neither appears in Appendix A. See the
+[workarounds](../analysis/substitutions-and-workarounds.md#problem-14-crystal-spacers-bare-wire-and-the-can-grounds).
+
+### Driver transformer — Problem 15 (T1) — exact match
+
+| | 40A (per the book) | 40B |
+|---|---|---|
+| Core | FT37-43, **orange dot** = #43 ferrite | ✓ FT37-43, black with orange dot |
+| Primary | 14 t #26, 25 cm | ✓ 14 t #26, **23 cm** |
+| Secondary | 4 t #26, 10 cm | ✓ 4 t #26, 10 cm |
+| R14 | 100 Ω | ✓ 100 Ω |
+
+The only difference is the primary wire length, and only on paper — cut the book's 25 cm.
+
+### Tuned transformers — Problem 16 (T2, T3) — matches, two small notes
+
+| | 40A (per the book) | 40B |
+|---|---|---|
+| T2 core | FT37-61, `A_l` = 66 nH/t² | ✓ FT37-61 |
+| T2 primary | 1 t **bare #22**, 5 cm | 1 t **#26**, 5 cm (schematic: 8 cm) |
+| T2 secondary | 20 t #26, 35 cm | ✓ 20 t #26, 31 cm |
+| T3 | 3 kΩ → 200 Ω step-down (turns not printed in the text) | 23 t #28 pri, 6 t #26 sec |
+| C2 | variable | ✓ 50 pF trimmer |
+| C4 | 5 pF | ✓ **4.7 pF** NP0, `479` |
+
+- **T2's turns are identical**, so Figure 6.10's model — a 66 nH shunt inductor (`1² × 66 nH`,
+  the magnetising inductance referred to the one-turn primary) feeding an ideal 1:20 — is
+  correct for the 40B as printed. Only the primary's wire gauge differs, which one turn cannot
+  care about.
+- **T3's 23:6 is exactly right** for the match the problem describes: `(23/6)² = 14.7` against a
+  required `3000/200 = 15`. The book doesn't print T3's turns in the pages transcribed here, so
+  the 40B's are the ones to use.
+- **C4 is 4.7 pF, not the 5 pF in Figure 6.10** — the same substitution as C37 in Problem 9, and
+  just as harmless.
+
+### The T37-2 inductance constant checks out on every toroid in the kit
+
+Problem 13B hands you `A_l = 4.0 nH/turn²` for the red T37-2 cores and asks you to compute L7
+and L8. On a 40B you can check it first, because Appendix A states both the turns and the
+inductance for every toroid:
+
+| Ref | Turns | `4.0 nH × N²` | Manual says |
+|---|---|---|---|
+| L2 | 13 | 0.68 µH | 0.68 µH ✓ |
+| L6 | 30 | 3.60 µH | 3.5 µH (rounded) |
+| L7 | 15 | 0.90 µH | 0.90 µH ✓ |
+| L8 | 12 | 0.58 µH | 0.58 µH ✓ |
+
+The white T68-7 (L9, 63 t, 21 µH) implies `A_l = 5.3 nH/t²`, matching the published figure for
+that core. So the book's constant is right for your cores, and Problem 13B's arithmetic is a
+confirmation rather than an article of faith. **The manual's stated inductances are nominal,
+not measured** — the tolerance on powdered-iron `A_l` is typically ±5–10%, and the real number
+depends on how tightly you wound it.
 
 ## Differences that matter elsewhere
 
@@ -103,11 +211,36 @@ the 40B design requires the manual's grouping — it's a convenience for keeping
 stable and reducing flip-overs. Just be deliberate: with plated-through holes, a part in the
 wrong hole is a bad afternoon.
 
+Chapters 5 and 6 make the divergence wider, not narrower. Problem 13 adds L7, L8, C45–C47 and
+the BNC jack J1; Problem 14 adds X1–X4, C9–C13, L4 and C14; Problem 15 adds T1 and R14;
+Problem 16 adds T2, T3, C2 and C4. That is capacitors, inductors, crystals, transformers, a
+connector and a resistor interleaved in an order the manual never contemplates — and three of
+those problems also have you solder in a temporary resistor and then **wick it back out**.
+
+Two habits worth adopting now:
+
+- **Work from a marked-up copy of Appendix B.** Tick parts off as you fit them, in the book's
+  order, rather than trying to hold two orderings in your head.
+- **Take the "leave the leads proud" instructions seriously.** The book repeatedly asks for
+  leads left partly exposed for test hooks (C45 in Problem 13, R14 in Problem 15). Trimming
+  them flush because the manual's photos look tidy costs you the measurement.
+
 ## Not yet checked
 
-This comparison only covers Problems 1–9. Later chapters solder much more of the board
-(crystal filter, VFO, mixers, PA, low-pass filter). Known differences to look into when I get
-there:
+This comparison covers Problems 1–16, and rests on the manual's *Theory of Operation*,
+*Specifications* and Appendix A. **It has not been checked against Appendix D (the schematic)
+for Chapters 5 and 6.** Open questions in rough order of how much they'd cost to get wrong:
+
+- **The harmonic filter's element order** (Problem 13) — which of C45/C47 faces the power
+  amplifier. Changes Problem 13D's answer by more than 5×. Read the schematic first.
+- **Whether NM0S sorts the crystals** (Problem 14) and to what tolerance. Problem 14A measures
+  it either way, so this costs nothing to find out the hard way.
+- **The 40B's CW offset** — Problem 14I's 1,240 Hz upper-sideband spur is 2× the 40A's 620 Hz.
+- **The PA's rated output** — Problem 13 opens with the 40A's 2 W.
+- Whether C6 still resonates T3's magnetising inductance the way p. 124 describes for the 40A.
+
+Later problems solder the rest of the board (VFO, mixers, AGC, PA, audio). Known differences
+to look into when I get there:
 
 - PA transistor: the 40B uses a 2SC5964/2SC2078 in TO-220 with a heatsink.
 - The 40B's JFETs are J309 (Q2, Q3, Q5, Q8).
