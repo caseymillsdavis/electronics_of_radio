@@ -21,6 +21,7 @@ the goal.
 | [`reference/norcal-40b-vs-40a.md`](reference/norcal-40b-vs-40a.md) | How the 40B differs from the 40A where the book's problems touch the board — including the Problem 13 harmonic filter, where the values genuinely diverge. |
 | [`analysis/problems-01-16-parts-audit.md`](analysis/problems-01-16-parts-audit.md) | **Main doc.** Every component each of Problems 1–16 needs, checked against the 40B kit. |
 | [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md) | How to run the problems without buying everything — substitute values, rescaled frequencies, MCU stand-ins, and what genuinely can't be faked. |
+| [`analysis/shopping-list.md`](analysis/shopping-list.md) | **Buying authority.** One consolidated, order-ready list of everything the exercises need, grouped by supplier cart, with tiers and bulk-buying notes for passives. |
 | [`analysis/bench-results.md`](analysis/bench-results.md) | **Results log.** Raw measurements and conclusions from problems actually worked at the bench. Contains worked answers — don't read ahead of where you are. |
 | [`analysis/test-equipment.md`](analysis/test-equipment.md) | Function-generator requirements derived from the problems, what to use instead of *Puff*, plus accessories and a shopping list. |
 | [`firmware/`](firmware/README.md) | MCU code standing in for test equipment — built and flashed from this repo. |
@@ -47,8 +48,8 @@ Need:
 - 10–20 m of RG58/U coax with BNC plugs — Problems 10 and 12.
 - A circuit simulator for Problems 13, 14 and 16. The book uses *Puff*;
   [free alternatives here](analysis/test-equipment.md#puff-and-what-to-use-instead).
-- Very little else — see the
-  [minimum shopping list](analysis/substitutions-and-workarounds.md#revised-shopping-list-if-you-want-the-minimum)
+- Everything else, in one order-ready list:
+  [`analysis/shopping-list.md`](analysis/shopping-list.md)
 
 ## Manual
 

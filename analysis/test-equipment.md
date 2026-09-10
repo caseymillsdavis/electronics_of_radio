@@ -358,82 +358,13 @@ The parts audit's own filter arithmetic was done the Python way, in about twenty
 
 ## Shopping list
 
-### Instruments
+**Moved to [shopping-list.md](shopping-list.md)** — one consolidated, order-ready list covering
+every problem analysed so far, grouped so each section is roughly one supplier's cart. It also
+covers how to buy resistors and capacitors in bulk (short version: one E24 resistor kit does the
+whole course; a capacitor kit is not worth buying).
 
-- [ ] Function generator meeting the table above
-- [ ] 12 V, 0.8 A-hr sealed lead-acid battery (Yuasa NP0.8-12 or equivalent) + float charger
-      — **required for Problem 2; a bench supply will not do**
-
-### Accessories
-
-- [ ] 3 × BNC tee (male-female-female) — P5, P8, P10, P12
-- [ ] 1 × BNC 50 Ω feedthrough terminator — P5, P8B, P10A, P13
-- [ ] 2 × BNC-to-minigrabber / test-hook lead — P3 explicitly builds on component leads, no
-      breadboard; P13 hooks onto C45's leads
-- [ ] 2–3 × BNC-BNC coax patch cables
-- [ ] BNC-to-banana or BNC-to-alligator adapter
-- [ ] Non-metallic (ceramic/plastic) trimmer tuning tool set — P8, P16, and the 40B's alignment
-- [ ] **10 m — better, 20 m — of RG58/U with BNC plugs** — P10, P12. Note the dielectric
-      (solid PE gives the book's 0.66c; foam runs faster), and measure the actual length before
-      you use it
-- [ ] **BNC barrel adapter (female-female)** — P14 wants the board connected directly to
-      channel 1 with the shortest possible lead, because cable capacitance distorts the filter
-      shape
-
-### Breadboard components
-
-Quantities are "buy a few spares", not the minimum.
-
-| Part | Qty | For |
-|---|---|---|
-| 510 Ω, **1/2 W** (not 1/4 W — see the audit) | 5 | P2 |
-| 300 kΩ, 1% metal film | 2 | P3 |
-| 3.0 kΩ, 1% metal film | 2 | P4 |
-| 2.0 kΩ, 1% metal film | 4 | P5 transistor switch, P6 |
-| 10 nF (0.01 µF) film, 5% | 5 | P3, P4 |
-| 1N4148 | 10 | P4, P6 |
-| 1 mH molded choke | 3 | P5, P6 |
-| P2N2222A or PN2222A (TO-92) | 5 | P5, P6 — sacrificial, spikes kill these |
-
-A generic 1% metal-film resistor assortment and a film capacitor assortment cover all of the
-above except the chokes and transistors, and will keep covering later chapters.
-
-### Added by Chapters 4–6
-
-| Part | Qty | For |
-|---|---|---|
-| 150 Ω | 2 | P14 — soldered in, then removed and discarded |
-| 200 Ω | 2 | P14, P15 — same |
-| 1 kΩ | 2 | P15 — same; **don't borrow the kit's R18** |
-| 1.5 kΩ | 2 | P16 — stands in for U1, then removed |
-| Bare #22 wire (or solid hookup wire to strip) | a metre | P14 crystal-can grounds, P16 input lead and ground loop |
-| Thin insulating sheet or heatshrink | scrap | P14 — the kit has no crystal spacers |
-
-None of these need to be precise. They need to be *measured*, which you can do.
-
-**Strongly recommended rather than strictly necessary:**
-
-- [ ] **AD8307 log-detector module** (~$5–10) — makes Problem 14K's 60 dB plot a DMM reading
-      rather than a fight with the scope's noise floor. Calibrate its slope and intercept
-      yourself and record them
-- [ ] **AD9850 or AD9851 DDS module** (~$5) — 0.03 Hz tuning resolution at 4.9 MHz, which is
-      what makes Problem 14A's six-crystal hunt and 14K's 50-point sweep automatable
-- [ ] **100 Ω carbon or cermet potentiometer** — the null method for Problem 10C, replacing the
-      book's transformer-and-metal-box fixture with a DMM reading
-
-**Only if you want the book's exact Problem 10C fixture:** an FT37-43 or BN-43-2402 ferrite core
-plus a 1 Ω resistor and a small metal enclosure. Two of the three alternatives need no parts —
-buy this because a current transformer is useful afterwards, not because you're forced to.
-**Do not wind the kit's FT37-43**; that core is T1, and Problem 15 needs it.
-
-### Kit-adjacent
-
-- [ ] #26 and #28 enamelled magnet wire, small spools — the kit ships ~20% margin on wire
-      and no allowance for a practice toroid wind
-- [ ] Solder wick, fine 63/37 solder, 15–25 W pencil iron or temperature-controlled station
-      at ~700 °F, small PCB vise — for Problems 8 and 9 onward
-- [ ] 50 Ω, 5 W dummy load with a BNC connector — not needed until the radio is finished, but
-      the 40B manual's alignment procedure requires it
+What stays here is the *reasoning* behind the generator choice — the requirements table above,
+the candidates, and the FY6900 analysis. The shopping list just says which one to click.
 
 ---
 

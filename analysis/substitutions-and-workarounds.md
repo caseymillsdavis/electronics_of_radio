@@ -523,53 +523,31 @@ JFET/FET follower rather than hanging an MCU pin off the tank.
 
 ---
 
-## Revised shopping list, if you want the minimum
+## What you can skip buying
 
-Assuming you have a typical embedded engineer's junk box (resistor assortment, some caps,
-protoboard) and are willing to measure things:
+The order itself lives in **[shopping-list.md](shopping-list.md)**. This section records the
+*judgment calls* behind it — the things a parts audit says to buy that a junk box and a
+multimeter make unnecessary.
 
-**Actually necessary:**
+**Skip if you own a resistor assortment:** the 510 Ω, 300 kΩ, 3 kΩ, 2 kΩ, 150 Ω, 200 Ω, 1 kΩ and
+1.5 kΩ. Every one is a standard E24 value, and a measured junk-box part beats an assumed nominal
+one. Several of them (Problems 14–16) get soldered in and thrown away, so tolerance is doubly
+irrelevant.
 
-- Function generator, or a committed plan for the DIY routes above
-- A battery — a 9 V alkaline is enough to do Problem 2 tonight
-- BNC 50 Ω feedthrough terminator, 2 × BNC tee, 2 × BNC-to-minigrabber leads
-- Soldering iron, fine solder, wick, PCB vise (before Problem 8)
-- #26 and #28 enamelled wire (the kit has no slack for a practice toroid wind)
+**Skip the capacitor assortment entirely.** Problems 1–16 need exactly one breadboard capacitor
+value — 10 nF, in Problems 3 and 4. Everything else is on the radio board and ships in the kit.
+Buy five 10 nF film caps; the tolerance only matters if your DMM has no capacitance range.
 
-**Worth buying, cheap, removes uncertainty:**
+**Skip the battery.** Problem 2 is done, on depleted AAAs; high internal resistance is what makes
+the droop measurable, so the dead-battery bag was the right source rather than a compromise.
 
-- 10 nF film capacitors, 5% — unless your DMM measures capacitance
-- A few TO-92 NPNs and 1 mH chokes — these are consumable in Problems 5 and 6
-- Non-metallic tuning tool
-- **A CMOS analog switch (74HC4066/74LVC1G66) and a rail-to-rail op-amp** — about a dollar
-  between them, and they turn the STM32 DAC into a proper 1 MHz AM source for Problem 4
+**Skip *Puff*** — free alternatives are in
+[test-equipment.md](test-equipment.md#puff-and-what-to-use-instead).
 
-**Skip unless you don't have them:** the 510 Ω, 300 kΩ, 3 kΩ and 2 kΩ resistors. Any
-assortment covers these, and measured junk-box parts are better than assumed nominal ones.
+**Skip the book's Problem 10C fixture** (FT37-43 ferrite + 1 Ω + metal box). Two of the three
+alternatives need no parts at all; buy it because current transformers are useful afterwards,
+not because the problem forces you to.
 
-### Added by Chapters 4–6
-
-**Actually necessary:**
-
-- **10 m (or better, 20 m) of RG58/U with BNC connectors** — Problems 10 and 12. The only new
-  consumable in three chapters, and buying the longer reel relaxes the pulse-width requirement
-  in Problem 10A and lowers the resonant frequency in Problem 12.
-- **A little bare #22 wire** — Problems 14 and 16. Stripped solid hookup wire or cut-off
-  resistor leads do fine.
-- **150 Ω, 200 Ω, 1 kΩ and 1.5 kΩ resistors**, temporary and discarded — Problems 14, 15, 16.
-  Tolerance is irrelevant; measure whatever you fit. Any assortment already covers these.
-- **A simulator** — Problems 13, 14, 16. Free; see
-  [test-equipment.md](test-equipment.md#puff-and-what-to-use-instead).
-
-**Worth buying, cheap, removes a genuine dead end:**
-
-- **An AD8307 log-detector module** (~$5–10) — makes Problem 14K's 60 dB plot a DC voltage
-  reading instead of a fight with the scope's noise floor.
-- **An AD9850/AD9851 DDS module** (~$5) — was optional for Problems 8 and 9; Chapter 5 makes it
-  the difference between an automated sweep and several hundred manual readings.
-- **A 100 Ω carbon or cermet potentiometer** — the null method for Problem 10C, which replaces
-  the book's transformer-and-metal-box fixture with a DMM reading.
-
-**Only if you want the book's exact fixture:** an FT37-43 or BN-43-2402 ferrite core and a 1 Ω
-resistor for Problem 10C's current transformer. Two of the three alternatives need no parts, so
-buy this because current transformers are useful, not because the problem forces you to.
+**Don't skip:** the function generator (or a committed plan for the DIY routes above), the coax
+for Problems 10 and 12, the BNC interconnect, and soldering gear before Problem 8. Those have no
+workaround in this repo.

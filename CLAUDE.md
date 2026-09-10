@@ -13,7 +13,8 @@ Radio*** (Cambridge University Press). The book is a lab course: **40 problems**
    have been analysed** (see the tracker below), and Problem 16 only partly — its pages run
    past what was uploaded. When new screenshots appear, extend the existing
    docs rather than starting parallel ones — the per-problem tables and the shopping list are
-   meant to grow.
+   meant to grow. **Analysing a new problem is not finished until its parts are reflected in
+   [`analysis/shopping-list.md`](analysis/shopping-list.md)** — see the convention below.
 2. **The radio is a NorCal 40B, not the book's NorCal 40A.** The 40A kit is discontinued. The
    40B (NM0S Electronics) is a revision of the same design and mostly maps well, but every
    problem that solders to the board needs checking against
@@ -102,6 +103,15 @@ Update this table when gear is bought.
 - **No spoilers in the body text.** The point is to work the problems. Where arithmetic is
   needed to justify a claim (does this trimmer have enough range? is this substitution
   valid?), put it behind a `<details>` block with a clear warning, as in the parts audit.
+- **Keep the shopping list current.** [`analysis/shopping-list.md`](analysis/shopping-list.md)
+  is the single buying authority — it's what gets opened when an order is about to go in, and
+  the owner would rather place one order than five. **Every pass that analyses new problems
+  updates it in the same pass.** A "Buy" verdict that lives only in the per-problem audit table
+  is a part that gets discovered as missing at the bench. Before adding a line, check it against
+  what's already there (most new R and C values are covered by the E24 kit already listed) and
+  against the workarounds doc (a documented substitute makes it Tier 3, not Tier 1). When
+  something is bought, move it to the bench inventory below; when something is deliberately *not*
+  bought, record why in the list's "Deliberately not buying" section so it doesn't creep back.
 - **Cite page numbers**: book pages as "p. 41", 40B manual pages by their printed number.
 - **Transcribe image-only source material** into markdown so it's greppable — the 40B
   manual's Appendix A was scanned images and is now
@@ -122,6 +132,7 @@ reference/   norcal-40b-parts-list.md  transcribed 40B BOM + suspected errata
              norcal-40b-vs-40a.md      where the 40B differs from the book's radio
 analysis/    problems-01-16-parts-audit.md   per-problem component audit
              substitutions-and-workarounds.md  how to avoid buying things
+             shopping-list.md          consolidated order-ready list — the buying authority
              bench-results.md          raw measurements + conclusions from problems worked
              test-equipment.md         function generator spec, simulator, shopping list
 firmware/    README.md                 layout + toolchain conventions
