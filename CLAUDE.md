@@ -3,18 +3,17 @@
 ## What this is
 
 Notes and analysis for working through **Paul Horowitz & David Rutledge, *The Electronics of
-Radio*** (Cambridge University Press). The book is a lab course: **40 problems** that build a
+Radio*** (Cambridge University Press). The book is a lab course: **39 problems** that build a
 40-metre CW transceiver while teaching the analog and RF theory behind each stage.
 
 ## Two standing facts about how work arrives here
 
-1. **The book is 40 problems long and they arrive incrementally.** The owner photographs or
-   scans pages and uploads them a few problems at a time. As of the last update, **Problems 1–16
-   have been analysed** (see the tracker below), and Problem 16 only partly — its pages run
-   past what was uploaded. **Source pages for Problems 17–39 are now on hand but unanalysed**;
-   which pages exist, and the three that don't, are indexed in
-   [`reference/source-page-coverage.md`](reference/source-page-coverage.md) — check it before
-   assuming a problem's text is available. When new pages appear, extend the existing
+1. **The book is 39 problems long, not 40, and they arrive incrementally.** (The count was
+   verified three ways — see
+   [`reference/source-page-coverage.md`](reference/source-page-coverage.md); don't "correct" it
+   back.) The owner photographs or scans pages and uploads them a few problems at a time. As of
+   the last update, **Problems 1–16 have been analysed** (see the tracker below) and
+   **source pages for the whole book are now on hand**, with 17–39 unanalysed. When new pages appear, extend the existing
    docs rather than starting parallel ones — the per-problem tables and the shopping list are
    meant to grow. **Analysing a new problem is not finished until its parts are reflected in
    [`analysis/shopping-list.md`](analysis/shopping-list.md)** — see the convention below.
@@ -89,7 +88,7 @@ See [`firmware/README.md`](firmware/README.md) for the layout convention.
 
 | Have | Notes |
 |---|---|
-| Oscilloscope | "very nice"; 10:1 probes. Confirm input C and probe C — Problems 3, 9, 12 and 16 need them as inputs. Also confirm: 10 ns/div timebase (P10) and a bandwidth-limit filter (P14) |
+| Oscilloscope | "very nice"; 10:1 probes. Confirm input C and probe C — Problems 3, 9, 12 and 16 need them as inputs. Also confirm: 10 ns/div timebase (P10) and a bandwidth-limit filter (P14, and P16D where it is load-bearing) |
 | Bench power supply | Regulated. Useless for Problem 2 (needs a source with real internal resistance) |
 | Multimeter | Good one. The workhorse for the measure-don't-assume approach |
 | Batteries | Bag of **depleted AAAs**. High internal resistance makes them the *right* source for Problem 2, not a compromise — a fresh cell's ~1 Ω is swamped by lead and contact resistance |
@@ -171,10 +170,10 @@ it came from.
 | 13 | 5 Filters | Harmonic filter | **yes** — L7, L8, C45, C46, C47, J1 | ✅ ⚠️ 40B values differ | ⬜ |
 | 14 | 5 Filters | IF filter | **yes** — X1–X4, C9–C13, L4, C14 | ✅ | ⬜ |
 | 15 | 6 Transformers | Driver transformer | **yes** — T1, R14 | ✅ | ⬜ |
-| 16 | 6 Transformers | Tuned transformers | **yes** — T2, T3, C2, C4 | 🟡 pages incomplete | ⬜ |
+| 16 | 6 Transformers | Tuned transformers | **yes** — T2, T3, C2, C4, C6 | ✅ | ⬜ |
 | 17 | 7 Acoustics | Tuned speaker | no | ⬜ | — |
 | 18 | 7 Acoustics | Acoustic standing-wave ratio | no | ⬜ | — |
-| 19 | 8 Transistor switches | Receiver switch | **yes** | ⬜ ⚠️ source pages missing | — |
+| 19 | 8 Transistor switches | Receiver switch | **yes** — Q1, R1, C3 | ⬜ | — |
 | 20 | 8 Transistor switches | Transmitter switch | **yes** — Q4, R24, R9, D11, C57, J3 | ⬜ | — |
 | 21 | 9 Transistor amplifiers | Driver amplifier | **yes** — R13, C56, D10, R11 | ⬜ | — |
 | 22 | 9 Transistor amplifiers | Emitter degeneration | **yes** | ⬜ | — |
@@ -195,12 +194,11 @@ it came from.
 | 37 | 15 Antennas and propagation | Antennas | no | ⬜ | — |
 | 38 | 15 Antennas and propagation | Propagation | no | ⬜ | — |
 | 39 | 15 Antennas and propagation | Listening | **yes** — whole radio | ⬜ | — |
-| 40 | ? | ? | ? | ⬜ ⚠️ source pages missing | — |
 
 **Analysed** = notes written here. **Bench** = actually built and measured, with results in
 [`analysis/bench-results.md`](analysis/bench-results.md). Board-work and title columns for
 17–39 are read off the scanned pages, not yet audited against the 40B — treat them as a
-starting point for the audit, not a conclusion.
+starting point for the audit, not a conclusion. **Problem 39 is the last one in the book.**
 
 ## Git
 

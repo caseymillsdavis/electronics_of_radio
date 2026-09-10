@@ -10,8 +10,14 @@ Keep it current as pages arrive.
 
 | Batch | Form | Pages | Notes |
 |---|---|---|---|
-| 1 | Phone screenshots | up to p. 127 | Problems 1–16. Problem 16 breaks off mid-sentence — see gap G1 |
+| 1 | Phone screenshots | up to p. 127 | Problems 1–16. Problem 16 broke off mid-sentence — closed by batch 3 |
 | 2 | Flatbed scans (Ricoh IM C401F), 2026-09-10 | pp. 138–313, selectively | Problems 17–39. 56 scans, one book page each |
+| 3 | Direct photographs, 2026-09-10 | pp. 126–130, 149–153 | Closed the two gaps batch 2 left: the tail of Problem 16 and the whole of Problem 19 |
+
+**Batch 3 is the best material in the repo.** Colour photographs of the open book, full page in
+frame, no shear and no spine shadow — the inner margin and its part letters are completely
+legible, which is exactly where the flatbed scans are weakest. A thumb appears at the edge of
+some frames without covering text. If a page ever needs recapturing, this is the method to use.
 
 ### Batch 2 mechanics
 
@@ -39,7 +45,7 @@ start of the next one. Titles marked † are OCR-confirmed from the heading; ‡
 |---|---|---|---|---|
 | 17 | 7 Acoustics | Tuned speaker † | 138–140 | ✅ complete |
 | 18 | 7 Acoustics | Acoustic standing-wave ratio † | 141 | ✅ complete |
-| 19 | 8 Transistor switches | Receiver switch ‡ | ≤149–151 | ⚠️ **start missing** — gap G2 |
+| 19 | 8 Transistor switches | Receiver switch † | 149–151 | ✅ complete (batch 3) |
 | 20 | 8 Transistor switches | Transmitter switch † | 151–153 | ✅ complete |
 | 21 | 9 Transistor amplifiers | Driver amplifier † | 175–177 | ✅ complete |
 | 22 | 9 Transistor amplifiers | Emitter degeneration † | 177–178 | ✅ complete |
@@ -60,40 +66,46 @@ start of the next one. Titles marked † are OCR-confirmed from the heading; ‡
 | 37 | 15 Antennas and propagation | Antennas † | 305–306 | ✅ complete |
 | 38 | 15 Antennas and propagation | Propagation † | 306–308 | ✅ complete |
 | 39 | 15 Antennas and propagation | Listening † | 308–313 | ✅ complete |
-| 40 | ? | ? | 314+ | ❌ **missing entirely** — gap G3 |
 
-Twenty-one of the twenty-four remaining problems are complete. Every chapter's problems section
-was scanned as one unbroken run, so there are no gaps *inside* the ranges above — the scans jump
-only between chapters, skipping chapter body text that the problems don't strictly need.
+**All of Problems 17–39 are complete, and 39 is the last problem in the book** — see below.
+Every chapter's problems section was scanned as one unbroken run, so there are no gaps *inside*
+the ranges above; the scans jump only between chapters, skipping chapter body text that the
+problems don't strictly need.
 
 Scanned runs, for reference: 138–141, 151–153, 175–179, 199–203, 219–225, 237–244, 250–260,
 274–277, 305–313.
 
-## Gaps — what to capture next
+## Gaps — none outstanding
 
-**G1 — rest of Problem 16 (Chapter 6), p. 128 onward.**
-Pre-existing, not addressed by batch 2. Batch 1 stops at p. 127 mid-sentence, and Figure 6.9
-labels a "Jumper for part C", so parts B and C at least exist beyond what we have. The analysis
-in [`../analysis/problems-01-16-parts-audit.md`](../analysis/problems-01-16-parts-audit.md)
-is marked provisional until this lands.
+All three gaps this file previously tracked are closed.
 
-**G2 — Problem 19, roughly pp. 148–150.**
-Batch 2's chapter-8 run starts at p. 151, already inside part E. The heading and parts A–D are on
-the preceding page(s), which survive only as the cut-off sliver on the p. 151 scan — about 40 % of
-each line, sheared at the left, so not recoverable. From that sliver the problem is clearly the
-**Receiver Switch**: the text covers blocking the transmitter signal from the receiver, the AGC
-circuit, and a slope-triggered scope measurement referencing Figure 8.8. **Scan pp. 148–150** —
-148 as insurance, since we can't see from here whether the problems section opens on 149 or 150.
+**G1 — tail of Problem 16 — closed by batch 3 (pp. 128–130).** Parts B–G are all present, and
+p. 130 carries only part G followed by white space, so Chapter 6 ends there. The audit in
+[`../analysis/problems-01-16-parts-audit.md`](../analysis/problems-01-16-parts-audit.md) is no
+longer provisional.
 
-**G3 — Problem 40, p. 314 onward.**
-Chapter 15's run ends at p. 313, which finishes Problem 39 and appears to end the chapter (the
-text stops about three-quarters down with white space below). No Problem 40 heading appears
-anywhere in batch 2, and the last scan's sliver shows p. 312, not p. 314 — so nothing hints at
-where it goes. **Scan from p. 314 to the end of the problem**, wherever it lands.
+**G2 — Problem 19 — closed by batch 3 (pp. 149–150).** p. 149 carries the chapter's
+FURTHER READING, the **PROBLEM 19 – RECEIVER SWITCH** heading and Figure 8.8; p. 150 carries the
+description and parts A–D. The heading is on 149, so the inferred title was right and is now
+verified. Parts E–H and the run to Problem 20 were already in batch 2 on p. 151.
+
+**G3 — Problem 40 — does not exist. The book has 39 problems, not 40.** Three independent lines
+of evidence agree:
+
+1. The problem headings run contiguously 1→39 with nothing missing and nothing after.
+2. Chapter 15 is the last chapter, and its problems section ends on p. 313 with Problem 39
+   finishing three-quarters down the page.
+3. Across all ~176 captured pages, **the highest problem number referenced in any cross-reference
+   is 39** — no passage anywhere forward-references a Problem 40.
+
+The owner, holding the book, independently reached the same conclusion. The "40 problems" figure
+that used to appear in `CLAUDE.md` and `README.md` was an early assumption and has been corrected
+throughout.
 
 ## Working copy
 
 An upright, page-ordered PDF of batch 2 (pp. 138–313, with a bookmark per book page) was built
-from the two uploads and handed back to the owner. It is deliberately **not committed** — same
-rule as the 40B manual. Rebuild it from the source scans if it's lost; the rotation map is
-recoverable automatically, since `tesseract --psm 0` gets every page right on this material.
+from the two uploads and handed back to the owner. It, the batch-3 photographs and the batch-1
+screenshots are all deliberately **not committed** — same rule as the 40B manual. The PDF can be
+rebuilt from the source scans if lost; the rotation map is recoverable automatically, since
+`tesseract --psm 0` gets every page right on this material.

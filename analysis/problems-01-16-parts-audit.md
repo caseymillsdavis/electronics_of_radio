@@ -501,23 +501,31 @@ Two things worth having straight before you start:
 
 ---
 
-## Problem 16 — Tuned transformers (p. 126–127 onward) — **on the board; pages incomplete**
+## Problem 16 — Tuned transformers (p. 126–130) — **on the board**
 
-> ⚠️ **Only pages 126–127 were uploaded.** Part A and the *Puff* model of Figure 6.10 are
-> covered, but Figure 6.9 labels a "Jumper for part C", so parts B and C at least exist beyond
-> what's here, and the page-127 text breaks off mid-sentence. **Treat this section as
-> provisional** and re-check it when the rest of the problem arrives.
+The longest problem in the book so far, and it runs in two halves: parts A–E build and measure
+the **RF Filter** (T2 joined to Problem 8's L1/C1), parts F–G build and measure the
+**IF-Filter network** (T3 feeding Problem 14's crystal filter). Both halves end by producing a
+loss figure the book tells you to keep — see the note on that below.
 
 | Needed | Kit? | Verdict |
 |---|---|---|
 | T2: FT37-61, 1 t primary + 20 t secondary | ✓ FT37-61, 1 t #26 (5 cm †) + 20 t #26 (31 cm) | ✓ turns match; **gauge differs** |
-| T3: FT37-61, 23 t primary + 6 t secondary | ✓ FT37-61, 23 t #28 (25 cm †) + 6 t #26 (13 cm) | ✓ |
+| T3: FT37-61, 23 t #28 primary + 6 t #26 secondary | ✓ FT37-61, 23 t #28 (25 cm †) + 6 t #26 (13 cm) | ✓ turns *and* gauges match |
 | C2, variable | ✓ 50 pF trimmer | ✓ |
 | C4, 5 pF | ✓ **4.7 pF** NP0 (`479`) | ✓ same substitution as C37 in Problem 9 |
-| 1.5 kΩ resistor — temporary, stands in for U1 | ✗ | **Buy** |
-| Bare **#22** wire — R2 input lead and the board-edge ground loop | ✗ | **Buy, or strip solid hookup wire** |
+| C6, 47 pF — T3 primary tuning | ✓ 47 pF NP0 (`470`) | ✓ |
+| L1, C1 — series resonator joined in at part C | ✓ | installed in Problem 8 |
+| L4 (18 µH), C14 (47 pF) — IF output network | ✓ | installed in Problem 14 |
+| J1 Antenna jack — generator feeds through it in part C | ✓ | installed in Problem 13 |
+| 1.5 kΩ resistor ×1 — temporary; U1 stand-in (A–E), then U2 load (G) | ✗ | **Buy** — E24 kit |
+| 750 Ω resistor — temporary, U1 hole #4 (part G input match) | ✗ | **Buy** — E24 kit |
+| 2.2 kΩ resistor — temporary, U1 hole #5 (part G input match) | ✗ | **Buy** — E24 kit |
+| Bare **#22** wire — R2 input lead, R2 jumper, board-edge ground loop | ✗ | **Buy, or strip solid hookup wire** |
 | 10:1 probe with **marked capacitance** | have | ✓ — needed as a model input, not a measurement |
-| Function generator, 0.5 Vpp 7 MHz sine | ✗ | **Buy** — no new spec |
+| Scope **low-pass / bandwidth-limit filter** | have? | **Confirm before part D** — not optional, see below |
+| Function generator: 0.5 Vpp @ 7 MHz (A), **10 Vpp @ 2.8 MHz** (D), 10 Vpp @ 4.9 MHz (G) | ✗ | **Buy** — the 2.8 MHz/10 Vpp case is already [requirement 4](test-equipment.md) |
+| Solder wick | on the list | ✓ — three separate "clean the holes" steps |
 | Non-metallic tuning tool for C2 | on the list | ✓ |
 | Simulator | ✗ | [see below](test-equipment.md#puff-and-what-to-use-instead) |
 
@@ -532,8 +540,15 @@ Two things worth having straight before you start:
   a 6% change on a series coupling element and moves nothing you'd see, but the model should
   describe the board you actually have.
 - **T3's 23:6 ratio is exactly the 3 kΩ → 200 Ω match the problem describes.** (23/6)² = 14.7
-  against a required 3000/200 = 15. The book doesn't print T3's turns in the visible text, so
-  the 40B's numbers are the ones to use — and they're right.
+  against a required 3000/200 = 15. Page 128 prints T3's winding directly — 23 turns of #28 for
+  the primary, 6 turns of #26 for the secondary — and the 40B matches on both turns *and* gauge.
+  Nothing to reconcile here.
+- **The book's T3 wire lengths are much longer than the kit's**, though: p. 128 says cut 40 cm
+  of #28 and 15 cm of #26, against Appendix A's 25 cm and 13 cm. Since the turns counts agree
+  exactly, the same winding cannot need 40 cm on one sheet and 25 cm on another — which is
+  independent support for the
+  [suspected errata](../reference/norcal-40b-parts-list.md#suspected-errata-in-the-manual) in
+  the 40B's wire lengths, and a second reason to cut long.
 - The temporary 1.5 kΩ stands in for U1's input resistance. The book quotes the SA602AN as
   **1.5 kΩ shunted by 3 pF**; the 40B's U1 is an SA612 or NE602 from the same family. Check
   your own datasheet rather than assuming, because that 3 pF is an explicit element in the
@@ -542,6 +557,29 @@ Two things worth having straight before you start:
   [appendix](#appendix-arithmetic-behind-the-sufficiency-claims). Since T2's turns are
   identical to the 40A's, the 66 nH shunt inductor in Figure 6.10 is correct for your board
   as printed.
+- **Part D is the one place a scope bandwidth-limit filter is load-bearing.** You are measuring
+  the RF Filter's rejection at the VFO image, 2.8 MHz — a deliberately tiny output. But a
+  function generator's own second and third harmonics of 2.8 MHz land at 5.6 and 8.4 MHz, which
+  is inside the filter's 7 MHz passband. The filter therefore passes the generator's
+  *impurities* far better than the fundamental you're trying to measure, and they can dominate
+  the trace. Switch the scope's low-pass filter in and the harmonics go away; leave it out and
+  you measure your generator instead of your radio. The book says to turn it off again
+  afterwards, and means it — leaving it on quietly corrupts every later measurement.
+- **Part G's "10-Vpp setting" and Figure 6.13's "20 Vpp" are the same thing.** Figure 6.13 draws
+  the source as its open-circuit voltage; the instruction gives the into-50 Ω setting, per the
+  [book's standing convention](test-equipment.md). Dial 20 Vpp *indicated* and you are 6 dB hot
+  into a filter whose loss you are about to record. Same trap as Problem 8F and 9F.
+- **Two numbers from this problem are inputs to a later one.** Part C's combined
+  Harmonic-Filter-plus-RF-Filter loss and part G's IF-network loss are both explicitly "save
+  this for analyzing receiver performance" — that's Problem 34 (Receiver Response). Record both
+  in [`bench-results.md`](bench-results.md) with the measurement conditions, not just the dB
+  figure. The book's sanity limits are >7 dB for part C and >10 dB for part G; exceeding either
+  means go looking for a bad joint or a coil lead in the wrong hole, not a fudge factor.
+- **Part F asks you to calculate C6, then tells you to fit 47 pF regardless.** The designer's
+  stated reason is that the radio "sounds best with that value". Do the calculation anyway and
+  note the gap — an intentional detune of an IF transformer is a design choice worth
+  understanding, and it's the kind of thing that looks like an error later if you don't write
+  down that it was deliberate.
 
 ---
 

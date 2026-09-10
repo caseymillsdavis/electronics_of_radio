@@ -5,7 +5,7 @@ reasoning lives in the [parts audit](problems-01-16-parts-audit.md), what you ca
 lives in [workarounds](substitutions-and-workarounds.md), and the function-generator spec lives
 in [test-equipment.md](test-equipment.md). Those explain *why*; this is what goes in the cart.
 
-**Covers Problems 1–16.** Problems 17–40 haven't been uploaded yet, so expect this to grow —
+**Covers Problems 1–16.** Problems 17–39 are on hand but not yet analysed, so expect this to grow —
 see [keeping it current](#keeping-this-list-current) at the bottom.
 
 ## How to read the tiers
@@ -57,15 +57,17 @@ Every fixed resistor value any of Problems 1–16 asks for:
 | 150 Ω | 14 | ✅ (15) | ✅ |
 | 200 Ω | 14, 15 | ✅ (20) | ❌ |
 | 510 Ω | 2 | ✅ (51) | ❌ |
+| 750 Ω | 16 | ✅ (75) | ❌ |
 | 1 kΩ | 15 | ✅ (10) | ✅ |
 | 1.5 kΩ | 16 | ✅ (15) | ✅ |
 | 2.0 kΩ | 5, 6 | ✅ (20) | ❌ |
+| 2.2 kΩ | 16 | ✅ (22) | ✅ |
 | 3.0 kΩ | 4 | ✅ (30) | ❌ |
 | 300 kΩ | 3 | ✅ (30) | ❌ |
 
-**A standard 1% metal-film E24 assortment spanning 10 Ω–1 MΩ covers all eight.** These run
-600–1500 pieces across the range for the price of a few coffees. An **E12** kit misses four of
-the eight exactly — which matters less than it sounds given this repo measures everything
+**A standard 1% metal-film E24 assortment spanning 10 Ω–1 MΩ covers all ten.** These run
+600–1500 pieces across the range for the price of a few coffees. An **E12** kit misses five of
+the ten exactly — which matters less than it sounds given this repo measures everything
 anyway, but E24 costs almost the same, so there's no reason to accept the gap.
 
 Two caveats on kits:

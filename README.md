@@ -3,7 +3,7 @@
 Notes, references and analysis collected while working through
 **Paul Horowitz & David Rutledge, *The Electronics of Radio*** (Cambridge University Press).
 
-The book is a lab course: **40 problems** that build a 40-metre CW transceiver while teaching
+The book is a lab course: **39 problems** that build a 40-metre CW transceiver while teaching
 the analog and RF theory behind each stage. I'm an embedded software engineer learning analog
 and RF, working through it at my own pace — problems get analysed here a few at a time as I
 reach them.
@@ -60,13 +60,14 @@ cited in these notes refer to the printed page numbers in that PDF.
 
 ## Progress
 
-Problems 1–16 analysed — Chapter 4 (transmission lines), Chapter 5 (filters) and the first two
-transformer problems of Chapter 6. Problem 16 is analysed only as far as the uploaded pages go.
+Problems 1–16 analysed, complete through the end of Chapter 6.
 
-**Source pages for Problems 17–39 have arrived** (Chapters 7–15) and are legible, but nothing
-from them is analysed yet. Three gaps are outstanding: the tail of Problem 16, the start of
-Problem 19, and all of Problem 40 — details and what to rescan in
+**Source pages for the whole book are now on hand** and legible, with Problems 17–39 (Chapters
+7–15) not yet analysed. There are no outstanding capture gaps — the index is in
 [`reference/source-page-coverage.md`](reference/source-page-coverage.md).
+
+The book has **39 problems, not 40**; an earlier note here said 40. See the coverage doc for how
+that was settled.
 
 Bench work has started: **Problem 2 is worked**, results in
 [`analysis/bench-results.md`](analysis/bench-results.md). The tracker lives in
