@@ -21,6 +21,7 @@ the goal.
 | [`reference/norcal-40b-vs-40a.md`](reference/norcal-40b-vs-40a.md) | How the 40B differs from the 40A where the book's problems touch the board — including the Problem 13 harmonic filter, where the values genuinely diverge. |
 | [`analysis/problems-01-16-parts-audit.md`](analysis/problems-01-16-parts-audit.md) | **Main doc.** Every component each of Problems 1–16 needs, checked against the 40B kit. |
 | [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md) | How to run the problems without buying everything — substitute values, rescaled frequencies, MCU stand-ins, and what genuinely can't be faked. |
+| [`analysis/bench-results.md`](analysis/bench-results.md) | **Results log.** Raw measurements and conclusions from problems actually worked at the bench. Contains worked answers — don't read ahead of where you are. |
 | [`analysis/test-equipment.md`](analysis/test-equipment.md) | Function-generator requirements derived from the problems, what to use instead of *Puff*, plus accessories and a shopping list. |
 | [`firmware/`](firmware/README.md) | MCU code standing in for test equipment — built and flashed from this repo. |
 | [`CLAUDE.md`](CLAUDE.md) | Standing context and working agreement — read this first if you're picking the project up. |
@@ -31,6 +32,10 @@ Have:
 
 - Breadboards
 - Bench power supply
+- Batteries — a bag of depleted AAAs, which turned out to be the *right* source for Problem 2
+  rather than a compromise (high internal resistance is what makes the droop measurable). A
+  12 V / 0.8 A-hr SLA is still worth buying only if you want a field battery for the finished
+  radio.
 - Multimeter
 - Oscilloscope (with 10:1 probes)
 - MCU dev kits — fair game as substitute instruments, see the workarounds doc
@@ -39,9 +44,6 @@ Need:
 
 - Function generator — see [`analysis/test-equipment.md`](analysis/test-equipment.md). Chapters
   4–6 add a **pulse-mode** requirement that can rule models out; check minimum pulse width.
-- A battery for Problem 2, which does not work off a regulated supply. A 9 V alkaline is
-  enough; the book's 12 V / 0.8 A-hr SLA is only worth it if you want a field battery for the
-  finished radio.
 - 10–20 m of RG58/U coax with BNC plugs — Problems 10 and 12.
 - A circuit simulator for Problems 13, 14 and 16. The book uses *Puff*;
   [free alternatives here](analysis/test-equipment.md#puff-and-what-to-use-instead).
@@ -58,4 +60,7 @@ cited in these notes refer to the printed page numbers in that PDF.
 
 Problems 1–16 analysed — Chapter 4 (transmission lines), Chapter 5 (filters) and the first two
 transformer problems of Chapter 6. Problem 16 is analysed only as far as the uploaded pages go.
-The tracker lives in [`CLAUDE.md`](CLAUDE.md#problem-tracker).
+
+Bench work has started: **Problem 2 is worked**, results in
+[`analysis/bench-results.md`](analysis/bench-results.md). The tracker lives in
+[`CLAUDE.md`](CLAUDE.md#problem-tracker).

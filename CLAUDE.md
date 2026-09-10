@@ -88,6 +88,7 @@ See [`firmware/README.md`](firmware/README.md) for the layout convention.
 | Oscilloscope | "very nice"; 10:1 probes. Confirm input C and probe C — Problems 3, 9, 12 and 16 need them as inputs. Also confirm: 10 ns/div timebase (P10) and a bandwidth-limit filter (P14) |
 | Bench power supply | Regulated. Useless for Problem 2 (needs a source with real internal resistance) |
 | Multimeter | Good one. The workhorse for the measure-don't-assume approach |
+| Batteries | Bag of **depleted AAAs**. High internal resistance makes them the *right* source for Problem 2, not a compromise — a fresh cell's ~1 Ω is swamped by lead and contact resistance |
 | Breadboards | |
 | MCU dev kits | **2 × STM32U5G9J-DK1** (STM32U5G9NJ, Cortex-M33 @ 160 MHz). Fair game as substitute instruments — see [`firmware/README.md`](firmware/README.md#target-hardware) |
 | **Function generator** | **Not yet owned.** Requirements and options in [`analysis/test-equipment.md`](analysis/test-equipment.md). Chapters 4–6 added a **pulse-mode** requirement that can rule models out — check minimum pulse width before ordering |
@@ -121,6 +122,7 @@ reference/   norcal-40b-parts-list.md  transcribed 40B BOM + suspected errata
              norcal-40b-vs-40a.md      where the 40B differs from the book's radio
 analysis/    problems-01-16-parts-audit.md   per-problem component audit
              substitutions-and-workarounds.md  how to avoid buying things
+             bench-results.md          raw measurements + conclusions from problems worked
              test-equipment.md         function generator spec, simulator, shopping list
 firmware/    README.md                 layout + toolchain conventions
              <instrument>/             MCU code standing in for a piece of test gear
@@ -129,27 +131,36 @@ firmware/    README.md                 layout + toolchain conventions
 New per-problem analysis extends `analysis/problems-01-16-parts-audit.md` (rename its range
 as it grows) rather than creating a file per problem.
 
+**Results from problems actually worked at the bench append to `analysis/bench-results.md`.**
+That file is the one exception to the no-spoilers convention — it's a results log, so it
+carries a blanket warning at the top instead of per-section `<details>` blocks. Transcribe raw
+meter readings verbatim; a rounded conclusion is worth less six months later than the numbers
+it came from.
+
 ## Problem tracker
 
-| # | Chapter | Title | Board work? | Analysed |
-|---|---|---|---|---|
-| 1 | 2 Components | Thevenin and Norton equivalents | no (paper) | ✅ |
-| 2 | 2 Components | Sources | no | ✅ |
-| 3 | 2 Components | Capacitors | no | ✅ |
-| 4 | 2 Components | Diode detectors | no | ✅ |
-| 5 | 2 Components | Inductors | no | ✅ |
-| 6 | 2 Components | Diode snubbers | no | ✅ |
-| 7 | 3 Phasors | Parallel-to-series conversion | no (paper) | ✅ |
-| 8 | 3 Phasors | Series resonance | **yes** — C1, L1 | ✅ |
-| 9 | 3 Phasors | Parallel resonance | **yes** — C37, C38, C39, L6 | ✅ |
-| 10 | 4 Transmission lines | Coaxial cable | no — bench coax | ✅ |
-| 11 | 4 Transmission lines | Waves | no (paper) | ✅ |
-| 12 | 4 Transmission lines | Resonance | no — bench coax | ✅ |
-| 13 | 5 Filters | Harmonic filter | **yes** — L7, L8, C45, C46, C47, J1 | ✅ ⚠️ 40B values differ |
-| 14 | 5 Filters | IF filter | **yes** — X1–X4, C9–C13, L4, C14 | ✅ |
-| 15 | 6 Transformers | Driver transformer | **yes** — T1, R14 | ✅ |
-| 16 | 6 Transformers | Tuned transformers | **yes** — T2, T3, C2, C4 | 🟡 pages incomplete |
-| 17–40 | — | not yet uploaded | — | ⬜ |
+| # | Chapter | Title | Board work? | Analysed | Bench |
+|---|---|---|---|---|---|
+| 1 | 2 Components | Thevenin and Norton equivalents | no (paper) | ✅ | ⬜ |
+| 2 | 2 Components | Sources | no | ✅ | ✅ [results](analysis/bench-results.md#problem-2--sources-p-4041) |
+| 3 | 2 Components | Capacitors | no | ✅ | ⬜ |
+| 4 | 2 Components | Diode detectors | no | ✅ | ⬜ |
+| 5 | 2 Components | Inductors | no | ✅ | ⬜ |
+| 6 | 2 Components | Diode snubbers | no | ✅ | ⬜ |
+| 7 | 3 Phasors | Parallel-to-series conversion | no (paper) | ✅ | ⬜ |
+| 8 | 3 Phasors | Series resonance | **yes** — C1, L1 | ✅ | ⬜ |
+| 9 | 3 Phasors | Parallel resonance | **yes** — C37, C38, C39, L6 | ✅ | ⬜ |
+| 10 | 4 Transmission lines | Coaxial cable | no — bench coax | ✅ | ⬜ |
+| 11 | 4 Transmission lines | Waves | no (paper) | ✅ | ⬜ |
+| 12 | 4 Transmission lines | Resonance | no — bench coax | ✅ | ⬜ |
+| 13 | 5 Filters | Harmonic filter | **yes** — L7, L8, C45, C46, C47, J1 | ✅ ⚠️ 40B values differ | ⬜ |
+| 14 | 5 Filters | IF filter | **yes** — X1–X4, C9–C13, L4, C14 | ✅ | ⬜ |
+| 15 | 6 Transformers | Driver transformer | **yes** — T1, R14 | ✅ | ⬜ |
+| 16 | 6 Transformers | Tuned transformers | **yes** — T2, T3, C2, C4 | 🟡 pages incomplete | ⬜ |
+| 17–40 | — | not yet uploaded | — | ⬜ | — |
+
+**Analysed** = notes written here. **Bench** = actually built and measured, with results in
+[`analysis/bench-results.md`](analysis/bench-results.md).
 
 ## Git
 

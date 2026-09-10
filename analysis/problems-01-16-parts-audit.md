@@ -81,6 +81,10 @@ Part C asks about the radio's receive current. The 40B draws 15–20 mA (manual
 *Specifications*), so the book's 20 mA figure works fine — see
 [the comparison notes](../reference/norcal-40b-vs-40a.md#receive-current-drain--problem-2c).
 
+**Worked at the bench** on 2 × depleted AAA cells and 4 × 1.76 kΩ — measurements, the fit, and
+the per-point-arithmetic trap that nearly produced a wrong conclusion are in
+[bench-results.md](bench-results.md#problem-2--sources-p-4041).
+
 ---
 
 ## Problem 3 — Capacitors / RC delay (p. 41–44)

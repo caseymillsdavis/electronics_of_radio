@@ -99,6 +99,30 @@ than the book asks for and it's the kind of thing your day job makes cheap. Watc
 reference: you need an absolute voltage, so use an external reference or calibrate against
 the DMM, and divide 12 V down to the ADC range with a measured divider.
 
+### The measurement trap: don't trust the per-point arithmetic
+
+Part A asks you to plot current against voltage; it's tempting to skip the plot and just
+divide `(Voc − V) / I` at each load point instead. **Don't** — those are not independent
+estimates. They all share the single open-circuit reading, and the shared error propagates
+unequally:
+
+```
+∂R_bat/∂Voc = 1/I
+```
+
+so an error in Voc distorts the lightest-load point several times harder than the
+heaviest-load one. That manufactures a clean-looking monotone trend in internal resistance out
+of one bad reading, and it's easy to mistake for the current-dependence Part B is hinting at.
+This is not hypothetical — it happened on the first run, see
+[bench results](bench-results.md#the-trap-the-r_bat-column-is-not-four-independent-estimates).
+
+The plot doesn't have this problem: the slope of the fit never uses Voc at all, so it recovers
+both the EMF and the resistance from the loaded points alone. If the fitted intercept
+disagrees with the measured Voc, **that gap is a result, not an error to average away** — on
+alkaline cells it's usually surface charge or relaxation, and it's the cue to re-measure Voc
+right after unloading. Which is the same instruction as the two-minute settle, arriving from
+the other direction.
+
 ---
 
 ## Problems 3–6: passives you can substitute freely
