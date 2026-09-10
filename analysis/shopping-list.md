@@ -1,12 +1,13 @@
 # Shopping list
 
 **One order, everything the exercises need.** This is the consolidated list — the per-problem
-reasoning lives in the [parts audit](problems-01-16-parts-audit.md), what you can avoid buying
+reasoning lives in the [parts audit](problems-01-39-parts-audit.md), what you can avoid buying
 lives in [workarounds](substitutions-and-workarounds.md), and the function-generator spec lives
 in [test-equipment.md](test-equipment.md). Those explain *why*; this is what goes in the cart.
 
-**Covers Problems 1–16.** Problems 17–39 are on hand but not yet analysed, so expect this to grow —
-see [keeping it current](#keeping-this-list-current) at the bottom.
+**Covers Problems 1–39 — the whole book.** Chapters 7–15 add almost no *components* (the 40B kit
+has every board part they install) but they add instruments, fixtures and one antenna. Those
+are in [Cart 5](#cart-5--chapters-715-instruments-and-fixtures).
 
 ## How to read the tiers
 
@@ -48,27 +49,32 @@ is from published specs, not from something measured on this bench.
 The useful thing to know here is that **the passive requirements for Problems 1–16 are much
 smaller than they look**, and one of the two obvious kit purchases isn't worth making.
 
-### Resistors — buy one E24 kit, and you're done through Problem 16
+### Resistors — buy one E24 kit, and you're done through Problem 39
 
-Every fixed resistor value any of Problems 1–16 asks for:
+Every fixed resistor value any problem in the book asks for, except one (see the note below):
 
 | Value | Problem | In E24? | In E12? |
 |---|---|---|---|
 | 150 Ω | 14 | ✅ (15) | ✅ |
 | 200 Ω | 14, 15 | ✅ (20) | ❌ |
+| 5.6 Ω | 31 | ✅ (56) | ❌ |
 | 510 Ω | 2 | ✅ (51) | ❌ |
 | 750 Ω | 16 | ✅ (75) | ❌ |
 | 1 kΩ | 15 | ✅ (10) | ✅ |
 | 1.5 kΩ | 16 | ✅ (15) | ✅ |
 | 2.0 kΩ | 5, 6 | ✅ (20) | ❌ |
 | 2.2 kΩ | 16 | ✅ (22) | ✅ |
-| 3.0 kΩ | 4 | ✅ (30) | ❌ |
-| 300 kΩ | 3 | ✅ (30) | ❌ |
+| 3.0 kΩ | 4, 29 | ✅ (30) | ❌ |
+| 300 kΩ | 3, 32 | ✅ (30) | ❌ |
 
-**A standard 1% metal-film E24 assortment spanning 10 Ω–1 MΩ covers all ten.** These run
-600–1500 pieces across the range for the price of a few coffees. An **E12** kit misses five of
-the ten exactly — which matters less than it sounds given this repo measures everything
+**A standard 1% metal-film E24 assortment spanning 10 Ω–1 MΩ covers all eleven.** These run
+600–1500 pieces across the range for the price of a few coffees. An **E12** kit misses six of
+the eleven exactly — which matters less than it sounds given this repo measures everything
 anyway, but E24 costs almost the same, so there's no reason to accept the gap.
+
+**The one exception is Problem 31's 8 Ω speaker load**, which has to dissipate real audio power
+for three problems running. A 1/4 W assortment part is marginal and drifts as it warms — buy an
+8.2 Ω at 1 W or better. It's a separate line in Cart 5.
 
 Two caveats on kits:
 
@@ -133,6 +139,8 @@ Often a different supplier (ham radio dealer, or Amazon) than Cart 1.
 | ☐ | **RG58/U with BNC plugs, 10 m minimum — 20 m better** | 1 | 1 | P10, P12. Buying the longer reel relaxes P10A's pulse-width requirement and lowers P12's resonant frequency. **Know the dielectric**: solid PE gives the book's 0.66c, foam runs faster. Measure the actual length before using it |
 | ☐ | BNC tee, male-female-female | 3 | 1 | P5, P8, P10, P12 |
 | ☐ | BNC 50 Ω feedthrough terminator | 1 | 1 | P5, P8B, P10A, P13 |
+| ☐ | **50 Ω termination or dummy load, ≥ 2.5 W, BNC** | 1 | 1 | **P24, P25, P30, P33 hold 30 Vpp = 2.25 W.** A 0.5 W feedthrough drifts, then dies, then corrupts the measurement. This supersedes the "later" entry below |
+| ☐ | BNC-BNC patch cable, short, for scope sync | 1 | 1 | P30C triggers the scope from the generator's sync output |
 | ☐ | BNC-to-minigrabber / test-hook lead | 2 | 1 | P3 builds on component leads with no breadboard; P13 hooks onto C45's leads |
 | ☐ | BNC-BNC patch cable | 2–3 | 1 | General |
 | ☐ | BNC barrel adapter, female-female | 1 | 1 | P14 — board straight onto channel 1 with the shortest possible lead; cable capacitance distorts the filter shape |
@@ -163,12 +171,43 @@ Needed **before Problem 8**, which is the first board work.
 | ☐ | Non-metallic (ceramic/plastic) trimmer tuning tool set | 1 | 1 | P8, P16, and the 40B's alignment. A metal screwdriver detunes the circuit as you tune it |
 | ☐ | Thin insulating sheet or heatshrink | scrap | 2 | P14 — the kit ships no crystal spacers |
 
+## Cart 5 — Chapters 7–15 instruments and fixtures
+
+Chapters 7–15 install ninety-odd components and the 40B kit has every one of them. What they
+add is everything *around* the board. Ordered roughly by the problem that first needs it.
+
+| ☐ | Part | Qty | Tier | What it's for |
+|---|---|---|---|---|
+| ☐ | Loudspeaker, ~2.25 in, 8 Ω, ≥ 0.25 W | 1 | 1 | P17 builds it into a tube; P33 onward it's the radio's speaker |
+| ☐ | Stereo 3.5 mm plug, solderable | 3 | 1 | P17's speaker lead, and spares — J3/J4 are both 3.5 mm |
+| ☐ | **3.5 mm shorting plug** (tip to sleeve) | 2 | 1 | P21, P23, P26, P28, P30 — in and out constantly. Make one from a spare plug |
+| ☐ | Cardboard mailing tube, ≥ 35 cm | 1 | 1 | P17 (16 cm) and P18 (extended past λ/2). Cut to fit — the length *is* the tuning |
+| ☐ | Cork liner sheet / gasket cork | scrap | 1 | P17 friction sleeve so the speaker slides to trim resonance |
+| ☐ | Hot glue gun | 1 | 2 | P17 — any cheap one |
+| ☐ | **Sound level meter**, 35–100 dB, C-weighted, small mic | 1 | 2 | P17, P18. **Has a documented MCU substitute** — see [workarounds](substitutions-and-workarounds.md) |
+| ☐ | Dowel or rod, ~40 cm, non-metallic, marked in cm | 1 | 1 | P18 pushes the mic down the tube. Make it |
+| ☐ | **1 Ω resistor** | 2 | **1** | Promoted from Tier 3 — P20 and P24 use it as the supply-current shunt, and every power number in P24/P25 scales with it |
+| ☐ | Keying relay, 5 V DIP (Magnecraft W171DIP-7 or any 5 V/500 Ω DIP relay with a snubber) | 1 | 3 | P20, P25I, P30C. **An MCU GPIO does this better** — buy only if you want Problem 6's inductive load made real |
+| ☐ | **Thermometer with a probe that can sit on a heat sink** | 1 | 2 | P25, P27E, P29C. **Prime MCU-substitute candidate** — three uses, two of which want simultaneous frequency |
+| ☐ | Heat-sink compound, small tube | 1 | 1 | P25 — couples the thermometer to the sink |
+| ☐ | Hair drier | 1 | 1 | P27E, P29C — scrounge. Plus a vented plastic box, which you make |
+| ☐ | **Frequency counter**, ≥ 5 MHz, fine resolution | 1 | 1 | P26 onward, constantly. **Buildable on the STM32** — see [workarounds](substitutions-and-workarounds.md); note the reference-accuracy limit there |
+| ☐ | 8.2 Ω resistor, **≥ 1 W** | 2 | 1 | P31–P33 audio load. Not the assortment part |
+| ☐ | **Step attenuator, 50 Ω, ≥ 80 dB in steps, shielded** | 1 | **1** | P33, P34, P35. The last significant instrument in the book. Buy, chain fixed SMA pads, or build — **shielding, not attenuation, is what limits a cheap one** |
+| ☐ | Antenna wire, ~22 m, plus 2 end insulators and a centre insulator | 1 | 1 | P34G, P36, P39. A 40 m dipole is ~20 m of wire and costs almost nothing |
+| ☐ | Coax feedline with BNC, 10 m+ | 1 | 1 | Feeds the antenna. The P10/P12 reel can do double duty |
+| ☐ | **2-way power combiner**, HF, isolation > 20 dB (e.g. ZFSC-2-1 class) | 1 | 2 | **P35 only.** A BNC tee is explicitly wrong — it lets the transmitters intermodulate each other |
+| ☐ | Battery-powered oscillator module in a die-cast box (Si5351/AD9850 + cell) | 1–2 | 2 | Stands in for the second and third transceiver in P34B and P35. Out-isolates a mains generator, which is the whole point |
+| ☐ | Second 10:1 probe with known capacitance | 1 | 1 | P22 needs two at once; check before you get there |
+
+---
+
 ## Later — not for the exercises
 
 Don't add these to this order unless you want them anyway.
 
-- **50 Ω, 5 W dummy load with BNC** — not needed until the radio is finished, but the 40B
-  manual's alignment procedure requires it.
+- ~~**50 Ω, 5 W dummy load with BNC**~~ — **promoted into Cart 2.** Problem 24 needs it, not
+  just the 40B's own alignment procedure.
 - **12 V battery + float charger** — a field supply for the finished radio. The 40B wants
   10–16 V. **Not needed for Problem 2**, which is done.
 
@@ -187,13 +226,23 @@ Worth recording, so these don't creep back onto the list:
   [test-equipment.md](test-equipment.md#puff-and-what-to-use-instead).
 - **The book's Problem 10C current-transformer fixture.** Two of three alternatives need no
   parts at all.
+- **A spectrum analyser.** Problem 30D looks like it demands one and doesn't — Figure 12.15 *is*
+  the spectrum plot, measured and printed in the book, and the exercise is to identify the
+  mixing orders behind each line. Paper, not hardware.
+- **A hardware Morse decoder.** Problem 39 assumes one; it's a Goertzel filter and some timing
+  logic. Run fldigi, or write it for the STM32 and put it in `firmware/`.
+- **EZNEC.** Problem 37 mentions it and doesn't require it; the whole problem is closed-form.
+  Free alternatives exist if you want to check yourself.
+- **A second and third NorCal 40B.** Problems 34B and 35 are written for a lab with several.
+  Two battery-powered oscillator modules in separate boxes substitute for both, and isolate
+  *better* than a bench generator does.
 
 ---
 
 ## Keeping this list current
 
 **When new problems are analysed, their parts land here in the same pass.** Adding a problem to
-the [parts audit](problems-01-16-parts-audit.md) without updating this file leaves the audit's
+the [parts audit](problems-01-39-parts-audit.md) without updating this file leaves the audit's
 "Buy" verdicts stranded in a per-problem table that nobody reads when placing an order — which
 is the failure mode this file exists to prevent.
 

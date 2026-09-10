@@ -46,7 +46,7 @@ to the buffer.
 **Consequences for Problem 9:** use N = 30 in part B, and 4.7 pF for C37 in part A. Your
 measured `f0` in 9A will land lower than a 40A builder's, and C39 in 9C will sit further from
 its maximum. Everything the problem asks you to do still works — see the range check in the
-[parts audit](../analysis/problems-01-16-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims).
+[parts audit](../analysis/problems-01-39-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims).
 
 ### Frequency plan
 
@@ -88,7 +88,7 @@ not order, and the 40B's filter is asymmetric (390 / 1000 / 1000). Depending on 
 faces the power amplifier, the impedance the filter presents to it differs by more than a
 factor of five — and finding that impedance is Problem 13D, with 13E asking you to halve it. Get
 Appendix B (placement) and Appendix D (schematic) out before soldering. Numbers in the
-[parts audit](../analysis/problems-01-16-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims).
+[parts audit](../analysis/problems-01-39-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims).
 
 ### IF filter — Problem 14 (Cohn crystal filter) — matches
 
@@ -227,9 +227,9 @@ Two habits worth adopting now:
 
 ## Not yet checked
 
-This comparison covers Problems 1–16, and rests on the manual's *Theory of Operation*,
-*Specifications* and Appendix A. **It has not been checked against Appendix D (the schematic)
-for Chapters 5 and 6.** Open questions in rough order of how much they'd cost to get wrong:
+This comparison rests on the manual's *Theory of Operation*, *Specifications* and Appendix A.
+**It has not been checked against Appendix D (the schematic)** for Chapters 5 and 6, nor for
+Chapters 7–15. Open questions in rough order of how much they'd cost to get wrong:
 
 - **The harmonic filter's element order** (Problem 13) — which of C45/C47 faces the power
   amplifier. Changes Problem 13D's answer by more than 5×. Read the schematic first.
@@ -239,10 +239,50 @@ for Chapters 5 and 6.** Open questions in rough order of how much they'd cost to
 - **The PA's rated output** — Problem 13 opens with the 40A's 2 W.
 - Whether C6 still resonates T3's magnetising inductance the way p. 124 describes for the 40A.
 
-Later problems solder the rest of the board (VFO, mixers, AGC, PA, audio). Known differences
-to look into when I get there:
+### Chapters 7–15 — checked against Appendix A, **not** against the schematic
 
-- PA transistor: the 40B uses a 2SC5964/2SC2078 in TO-220 with a heatsink.
-- The 40B's JFETs are J309 (Q2, Q3, Q5, Q8).
-- The 40B has an LM393 (U6) for RIT switching, plus an SB160 and four 1N5817 Schottkys.
-- The 40B's AGC uses an 8-pin 2.2 MΩ SIP resistor network (R5) rather than discretes.
+Problems 17–39 have now been audited part by part in
+[`../analysis/problems-01-39-parts-audit.md`](../analysis/problems-01-39-parts-audit.md).
+**Every board component they install is in the 40B kit.** The differences below are the ones
+that change a number or a limit; each is written up in the audit next to the problem it hits.
+
+| Ref | Book (40A) | 40B | Problem | Why it matters |
+|---|---|---|---|---|
+| **Q7** | 2N3553, TO-39 can | 2SC5964 / 2SC2078, TO-220 | 24, 25 | Mounting instructions don't transfer (can-is-collector vs tab), the V<sub>CEO</sub> ceiling differs, and the thermal resistance is in a different class |
+| **R<sub>θjc</sub>** | 25 °C/W, given for the 2N3553 | whatever the TO-220 part specifies | 25 | It is an **input** to Problem 25, not a result. Carry it across and every junction temperature is wrong |
+| **Q1** | 2N4124 | 2N3904 | 19 | Part H computes switch loss from C<sub>obo</sub> = 3.5 pF, a 2N4124 figure |
+| **C50** | air variable, ~2–25 pF | 50 pF air trimmer | 26, 27 | Part D's "average is 14 pF" is a 40A number; the 40B tunes wider |
+| **C17** | assumed 7–70 pF | 50 pF trimmer | 29 | Part B computes the reachable BFO range from the book's figure |
+| **L9** | 62 turns | 63 turns | 26, 27 | Parts D and H are built on the turns count |
+| **R12** | 20 Ω | 22 Ω | 21, 22 | Trivial — the book tells you to measure it anyway |
+| **C42 / C43** | 10 µF / 47 nF | 100 µF / 0.1 µF | 20 | Trivial — regulator bypass, same job |
+| **C31** | 5 pF | 4.7 pF | 30 | Same substitution as C4 and C37 |
+| **U1, U2, U4** | SA602AN | SA612 / NE602 | 28–30 | Same family and pinout. Only Problem 28E cares — it asks you to find an error in a specific figure of the **SA602AN** data sheet |
+| **S1, S2** | left unpopulated through the course | supplied slide switches | 20, 24, 27, 33 | The book uses their empty holes as a current shunt and a jumper. Leave both out until Problem 33 |
+
+Confirmed the same, and worth knowing: **J309** for Q2/Q3/Q5/Q8 (and Figure 13.5's conductance
+curves are drawn for the J309 in the first place), **MVAM108** for D8, **LM393** for U6,
+**LM386** for U3, **LM78L08** for U5, and the six **4.915 MHz** crystals. The 40B's **R5**
+being an 8-pin 2.2 MΩ SIP network rather than four discretes is an improvement — the circuit
+needs four *matched* resistors.
+
+### Three things to resolve from Appendix D before you need them
+
+None of these is settled by Appendix A alone, and each has a problem riding on it.
+
+1. **C56 — the largest open question.** Figure 9.19 (p. 176) draws C56 as a **10 µF polarised
+   electrolytic**; the 40B's Appendix A lists C56 among the **0.047 µF ceramics**. That is a
+   factor of ~210 on the capacitor that sets the transmitter's key-up decay, and three problems
+   depend on it: 21 (install), 25I (measure the emitter-current decay against theory) and 30C
+   (rise and fall times of the keying envelope). A 40B keying in microseconds would click badly
+   enough to be a known complaint, so this looks more like an errata than a design change —
+   but **check the schematic and the parts bag before Problem 25**.
+2. **D12.** The book calls it a zener that conducts at 36 V to protect the PA's collector, and
+   has you probe its cathode. The 40B lists an **SB160**, a 60 V Schottky rectifier. The probe
+   point may be right; the protection story is not. Read the schematic before running
+   Problem 24 up to its efficiency roll-off.
+3. **RFC1.** Problem 24 has you install C44, D12 and RFC1 together. **RFC1 does not appear in
+   the 40B's Appendix A at all** — the molded inductors are L1, L4, L5 and RFC2, and the toroid
+   list has no RFC1 either. Check the schematic and the bags; if Appendix A really omits it,
+   that is another entry for the
+   [parts-list errata](norcal-40b-parts-list.md#suspected-errata-in-the-manual).

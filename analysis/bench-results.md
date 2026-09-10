@@ -1,7 +1,7 @@
 # Bench results
 
 A running log of problems actually **worked at the bench** — the raw numbers, what came out
-of them, and what to do differently next time. The [parts audit](problems-01-16-parts-audit.md)
+of them, and what to do differently next time. The [parts audit](problems-01-39-parts-audit.md)
 says what a problem needs and the [workarounds doc](substitutions-and-workarounds.md) says how
 to avoid buying it; this file says what happened when the thing was actually built.
 

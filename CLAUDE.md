@@ -94,9 +94,13 @@ See [`firmware/README.md`](firmware/README.md) for the layout convention.
 | Batteries | Bag of **depleted AAAs**. High internal resistance makes them the *right* source for Problem 2, not a compromise — a fresh cell's ~1 Ω is swamped by lead and contact resistance |
 | Breadboards | |
 | MCU dev kits | **2 × STM32U5G9J-DK1** (STM32U5G9NJ, Cortex-M33 @ 160 MHz). Fair game as substitute instruments — see [`firmware/README.md`](firmware/README.md#target-hardware) |
-| **Function generator** | **Not yet owned.** Requirements and options in [`analysis/test-equipment.md`](analysis/test-equipment.md). Chapters 4–6 added a **pulse-mode** requirement that can rule models out — check minimum pulse width before ordering |
+| **Function generator** | **Not yet owned.** Requirements and options in [`analysis/test-equipment.md`](analysis/test-equipment.md). Chapters 4–6 added a **pulse-mode** requirement that can rule models out; Chapters 7–15 add a **DC offset** requirement that rules out the cheapest modules |
 | **Coax** | **Not yet owned.** Problems 10 and 12 need 10–20 m of RG58/U with BNC plugs |
-| **Circuit simulator** | Problems 13, 14 and 16 call for *Puff*. Free alternatives in [`analysis/test-equipment.md`](analysis/test-equipment.md#puff-and-what-to-use-instead) |
+| **Circuit simulator** | Problems 13, 14, 16 and 19 call for *Puff*. Free alternatives in [`analysis/test-equipment.md`](analysis/test-equipment.md#puff-and-what-to-use-instead) |
+| **50 Ω load, ≥ 2.5 W** | **Not yet owned.** Problems 24, 25, 30 and 33 run 30 Vpp into 50 Ω. A 0.5 W feedthrough terminator will not survive it |
+| **Frequency counter** | **Not yet owned.** Needed constantly from Problem 26 on. Buildable on the STM32 — see [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md) |
+| **Step attenuator** | **Not yet owned.** 50 Ω, ≥ 80 dB, shielded. Problems 33–35. Shielding, not attenuation, is the hard part |
+| **Sound level meter** | **Not yet owned.** Problems 17–18 only, and mostly substitutable — Problem 18 needs a ratio, not an absolute level |
 
 Update this table when gear is bought.
 
@@ -133,7 +137,7 @@ README.md                              orientation and index
 reference/   norcal-40b-parts-list.md  transcribed 40B BOM + suspected errata
              norcal-40b-vs-40a.md      where the 40B differs from the book's radio
              source-page-coverage.md   which book pages we hold, and the known gaps
-analysis/    problems-01-16-parts-audit.md   per-problem component audit
+analysis/    problems-01-39-parts-audit.md   per-problem component audit — all 39
              substitutions-and-workarounds.md  how to avoid buying things
              shopping-list.md          consolidated order-ready list — the buying authority
              bench-results.md          raw measurements + conclusions from problems worked
@@ -142,8 +146,8 @@ firmware/    README.md                 layout + toolchain conventions
              <instrument>/             MCU code standing in for a piece of test gear
 ```
 
-New per-problem analysis extends `analysis/problems-01-16-parts-audit.md` (rename its range
-as it grows) rather than creating a file per problem.
+Per-problem analysis lives in `analysis/problems-01-39-parts-audit.md`, one section per
+problem, rather than a file per problem. It now covers the whole book.
 
 **Results from problems actually worked at the bench append to `analysis/bench-results.md`.**
 That file is the one exception to the no-spoilers convention — it's a results log, so it
@@ -171,34 +175,39 @@ it came from.
 | 14 | 5 Filters | IF filter | **yes** — X1–X4, C9–C13, L4, C14 | ✅ | ⬜ |
 | 15 | 6 Transformers | Driver transformer | **yes** — T1, R14 | ✅ | ⬜ |
 | 16 | 6 Transformers | Tuned transformers | **yes** — T2, T3, C2, C4, C6 | ✅ | ⬜ |
-| 17 | 7 Acoustics | Tuned speaker | no | ⬜ | — |
-| 18 | 7 Acoustics | Acoustic standing-wave ratio | no | ⬜ | — |
-| 19 | 8 Transistor switches | Receiver switch | **yes** — Q1, R1, C3 | ⬜ | — |
-| 20 | 8 Transistor switches | Transmitter switch | **yes** — Q4, R24, R9, D11, C57, J3 | ⬜ | — |
-| 21 | 9 Transistor amplifiers | Driver amplifier | **yes** — R13, C56, D10, R11 | ⬜ | — |
-| 22 | 9 Transistor amplifiers | Emitter degeneration | **yes** | ⬜ | — |
-| 23 | 9 Transistor amplifiers | Buffer amplifier | **yes** | ⬜ | — |
-| 24 | 10 Power amplifiers | Power amplifier | **yes** | ⬜ | — |
-| 25 | 10 Power amplifiers | Thermal modeling | **yes** — D12 | ⬜ | — |
-| 26 | 11 Oscillators | VFO | **yes** — L9, C51, C52, C53, D8 | ⬜ | — |
-| 27 | 11 Oscillators | Gain limiting | **yes** | ⬜ | — |
-| 28 | 12 Mixers | RF mixer | **yes** — U1 (SA602AN) | ⬜ | — |
-| 29 | 12 Mixers | Product detector | **yes** | ⬜ | — |
-| 30 | 12 Mixers | Transmit mixer | **yes** | ⬜ | — |
-| 31 | 13 Audio circuits | Audio amplifier | **yes** | ⬜ | — |
-| 32 | 13 Audio circuits | Automatic gain control | **yes** — C55, R22, C22, R7 | ⬜ | — |
-| 33 | 13 Audio circuits | Alignment | **yes** — whole radio | ⬜ | — |
-| 34 | 14 Noise and intermodulation | Receiver response | **yes** — whole radio | ⬜ | — |
-| 35 | 14 Noise and intermodulation | Intermodulation | **yes** — whole radio | ⬜ | — |
-| 36 | 14 Noise and intermodulation | Demonstration | **yes** — whole radio | ⬜ | — |
-| 37 | 15 Antennas and propagation | Antennas | no | ⬜ | — |
-| 38 | 15 Antennas and propagation | Propagation | no | ⬜ | — |
-| 39 | 15 Antennas and propagation | Listening | **yes** — whole radio | ⬜ | — |
+| 17 | 7 Acoustics | Tuned speaker | no — a speaker in a tube | ✅ | ⬜ |
+| 18 | 7 Acoustics | Acoustic standing-wave ratio | no — same tube, extended | ✅ | ⬜ |
+| 19 | 8 Transistor switches | Receiver switch | **yes** — Q1, R1, C3 | ✅ ⚠️ Q1 differs | ⬜ |
+| 20 | 8 Transistor switches | Transmitter switch | **yes** — Q4, R24, R9, D11, C57, J3 | ✅ | ⬜ |
+| 21 | 9 Transistor amplifiers | Driver amplifier | **yes** — R13, C56, D10, R11 | ✅ | ⬜ |
+| 22 | 9 Transistor amplifiers | Emitter degeneration | no — measures Problem 21's build | ✅ | ⬜ |
+| 23 | 9 Transistor amplifiers | Buffer amplifier | **yes** — Q5, C36, R10 | ✅ | ⬜ |
+| 24 | 10 Power amplifiers | Power amplifier | **yes** — Q7, C44, D12, RFC1 | ✅ ⚠️ PA transistor differs | ⬜ |
+| 25 | 10 Power amplifiers | Thermal modeling | **yes** — C48 | ✅ ⚠️ θ<sub>JC</sub> is a 40A number | ⬜ |
+| 26 | 11 Oscillators | VFO | **yes** — L9, C51, C52, C53, D8, C50 | ✅ ⚠️ L9 turns, C50 range | ⬜ |
+| 27 | 11 Oscillators | Gain limiting | **yes** — U6, R16, R15 (RIT) | ✅ | ⬜ |
+| 28 | 12 Mixers | RF mixer | **yes** — U1, U2, C5, C8, C15, R2 | ✅ | ⬜ |
+| 29 | 12 Mixers | Product detector | **yes** — X5, C17, C18 | ✅ ⚠️ C17 range | ⬜ |
+| 30 | 12 Mixers | Transmit mixer | **yes** — U4, X6, C34, C31, L5 | ✅ | ⬜ |
+| 31 | 13 Audio circuits | Audio amplifier | **yes** — U3, C27, C41, C20–C23, C55, C22, R22, R7 | ✅ | ⬜ |
+| 32 | 13 Audio circuits | Automatic gain control | **yes** — Q2, Q3, R5, R6, D5, D6, C29, C30 | ✅ | ⬜ |
+| 33 | 13 Audio circuits | Alignment | **yes** — C19, C26, C28, R8, R3, R4, D1–D4, J4, S1, S2, box | ✅ | ⬜ |
+| 34 | 14 Noise and intermodulation | Receiver response | no — whole radio; wants a 2nd transceiver | ✅ | ⬜ |
+| 35 | 14 Noise and intermodulation | Intermodulation | no — whole radio; wants 3 radios + a combiner | ✅ | ⬜ |
+| 36 | 14 Noise and intermodulation | Demonstration | no — on the air; **needs a licence** | ✅ | ⬜ |
+| 37 | 15 Antennas and propagation | Antennas | no (paper) | ✅ | ⬜ |
+| 38 | 15 Antennas and propagation | Propagation | no (paper — data is in the book) | ✅ | ⬜ |
+| 39 | 15 Antennas and propagation | Listening | no — on the air, receive only | ✅ | ⬜ |
 
 **Analysed** = notes written here. **Bench** = actually built and measured, with results in
-[`analysis/bench-results.md`](analysis/bench-results.md). Board-work and title columns for
-17–39 are read off the scanned pages, not yet audited against the 40B — treat them as a
-starting point for the audit, not a conclusion. **Problem 39 is the last one in the book.**
+[`analysis/bench-results.md`](analysis/bench-results.md). **Problem 39 is the last one in the
+book.**
+
+⚠️ marks a problem where the 40B differs from the book in a way that **changes a number you are
+asked to calculate or a limit you are asked to respect** — not merely a different part. All are
+written up in the audit next to the problem, and summarised in
+[`reference/norcal-40b-vs-40a.md`](reference/norcal-40b-vs-40a.md). Three further questions need
+the 40B schematic to settle (C56, D12, RFC1) and are flagged there too.
 
 ## Git
 

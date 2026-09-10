@@ -1,7 +1,7 @@
 # Substitutions and workarounds
 
 How to run Problems 1–16 without buying everything. Companion to the
-[parts audit](problems-01-16-parts-audit.md), which says what the book asks for; this says
+[parts audit](problems-01-39-parts-audit.md), which says what the book asks for; this says
 what you can get away with instead.
 
 ## Two principles that collapse most of the shopping list
@@ -489,12 +489,155 @@ Problems 8 and 9, Chapter 5 settles it. If you go this route, the through-refere
 [test-equipment.md](test-equipment.md#bench-calibration-worth-doing-on-any-generator) stops
 being optional — it's the only thing that makes Problem 8E's response plot mean anything.
 
-### A frequency counter for the 40B alignment — yes, easily
+### A frequency counter for Problems 26–33 — yes, with one honest limit
 
-The 40B's VFO alignment (manual step 2a) wants a counter on a ~2.1 MHz signal. Timer input
-capture, gate for a second, done — and more accurate than you need. One caution: probing an
-oscillator loads it and pulls its frequency. Buffer with a high-impedance stage or a single
-JFET/FET follower rather than hanging an MCU pin off the tank.
+Timer input capture, gate for a second, done. From Problem 26 onward you need a counter almost
+continuously, so this is the highest-value MCU instrument in the project. Two cautions and one
+real limit:
+
+- **Probing an oscillator pulls its frequency.** Buffer with a high-impedance stage or a single
+  JFET follower rather than hanging an MCU pin off the tank.
+- **Know your input capacitance and keep it constant.** Problem 28A tells you to leave the
+  counter connected for the entire exercise, because removing its ~30 pF shifts the VFO enough
+  to walk the signal out of the IF filter's passband. Whatever you build becomes part of the
+  circuit; make it repeatable rather than low.
+- **The limit: Problem 29C asks for the BFO "to the nearest hertz" near 4.9 MHz.** That is
+  0.2 ppm. An STM32's HSE crystal is 10–50 ppm and drifts with the same room temperature you
+  are deliberately changing — so as an *absolute* reading, 1 Hz at 4.9 MHz is out of reach
+  without a TCXO, an oven, or a GPS-disciplined reference.
+
+  **This matters much less than it looks.** Problems 27E and 29C measure temperature
+  *coefficients* — they want the frequency *difference* as the board cools, and a common
+  reference error cancels in a difference. What you need there is short-term stability over the
+  few minutes of a run, which a crystal has in abundance, not absolute accuracy. Only Problem
+  33's alignment wants an absolute number, and it wants 620 Hz of audio and a 7 MHz carrier to
+  a few hundred hertz — both comfortably inside a plain crystal's accuracy.
+
+  So: build the counter, use it for everything, and if you want the absolute 4.9 MHz figure to
+  the hertz, discipline the reference against WWV or a GPS module. Write the calibration down
+  next to the code either way.
+
+### A keying source for Problems 20, 25 and 30 — yes, and strictly better than the relay
+
+The book keys the transmitter with a Magnecraft W171DIP-7 relay driven from a function
+generator at 10–20 Hz, because it needs a *repetitive* key-down/key-up cycle the scope can
+trigger on. The key line simply shorts to ground.
+
+An MCU replaces the generator *and* the relay: an open-drain GPIO (or an optocoupler, if you
+want galvanic isolation from the radio) pulled to the key line, toggled from a timer. You get
+exact 10 Hz and 20 Hz, no contact bounce to confuse the rise-time measurement in Problem 30C,
+and a second GPIO as a hardware sync output for the scope trigger — which the book otherwise
+takes from the generator's sync connector.
+
+**One reason to buy the relay anyway:** it is an inductive load with a snubber diode, which is
+Problem 6 made physical. If Problem 6 was interesting, spend the few pounds.
+
+### A thermometer and logger for Problems 25, 27E and 29C — yes, and it changes the experiment
+
+Three problems want temperature, and the book's method is a glass thermometer coated in
+heat-sink compound, read by eye once a minute.
+
+- **Problem 25** is a twenty-minute thermal step response on the PA heat sink: ten readings a
+  minute apart, then one at twenty minutes.
+- **Problems 27E and 29C** heat the board with a hair drier and record **frequency and
+  temperature together** as it cools.
+
+A thermistor or a DS18B20 on the heat sink, logged by the MCU, gives a properly sampled step
+response instead of twelve hand-read points — and the time constant then falls out of a fit
+rather than the book's two-point estimate. Better still, for Problems 27E and 29C the same MCU
+is already counting frequency, so **one instrument logs both channels on one timebase**, which
+is exactly the measurement those problems want and awkward to do by hand.
+
+The repo's rule applies with force here: an absolute temperature is a calibrated quantity.
+Write the thermistor's β and reference resistance, or the DS18B20's offset, next to the code.
+
+### A Morse decoder for Problem 39 — yes, trivially
+
+The signal is a 620 Hz tone keyed on and off. Detection is a Goertzel bin at 620 Hz on the ADC
+plus threshold-and-timing logic to turn mark and space durations into dots, dashes, letters and
+words. A couple of hundred lines, and it belongs in `firmware/`.
+
+The zero-effort alternative is **fldigi** on a PC with the radio's audio into a sound card —
+free, and working tonight. Do that first, write your own second.
+
+Both are worth less than the book implies. Adjusting the RF gain so atmospheric noise doesn't
+manufacture characters is most of the skill, and a naive decoder is *worse* than a human ear at
+low signal-to-noise — noise arrives as strings of `E`s, because one dot is the shortest
+character there is.
+
+---
+
+## Chapters 7–15: the four things that aren't MCU problems
+
+### The sound level meter (Problems 17, 18)
+
+The book specifies a Tenma 72-860. What Problem 17 actually needs is an **absolute** SPL reading
+in dB, **flat** across 500–700 Hz, from a microphone small enough to sit in the mouth of a
+mailing tube. Problem 18 needs the same microphone on a rod, pushed down inside the tube.
+
+**Problem 18 doesn't need calibration at all.** It measures a standing-wave *ratio* — maximum
+over minimum — and a ratio is indifferent to an unknown constant gain. Any electret capsule on
+an ADC will do it, and the accuracy is set by how well you can measure the *minima*, not by
+absolute level. The book's 114 dB target is a convenience, not a requirement; work at a lower
+drive level and stay above your noise floor.
+
+**Problem 17 does need calibration**, because it asks for L<sub>p</sub> in dB and a speaker
+impedance derived from it. Three honest options, cheapest first:
+
+1. **A phone SPL app**, which is uncalibrated but often surprisingly close, and free. Good
+   enough to find the resonance and the 3 dB points — which is what parts A and B actually
+   need. The Q from part B is again a ratio of *frequencies*, so it survives an uncalibrated
+   meter completely.
+2. **An electret capsule on the MCU's ADC**, calibrated against something. Without a reference
+   you have a relative instrument, which as above covers most of the chapter.
+3. **A real sound level meter.** Cheap Class 2 meters exist. What buying one gets you is part C
+   — the speaker impedance from an absolute SPL — and the confidence that the 3 dB points are
+   really 3 dB.
+
+The one thing an electret can't fake is the meter's specified 1.5 s averaging and C weighting;
+implement both in software if you go that route, and write the constants down.
+
+### The step attenuator (Problems 33, 34, 35)
+
+Needed from Problem 33 to the end: 50 Ω, flat at 7 MHz, switchable to at least 80 dB, and
+Problem 34 wants input levels down to −150 dBm.
+
+**Shielding, not attenuation, is the hard part.** The book warns twice about keeping cables
+separated so signals don't couple *around* the attenuator, and Problem 34B is in effect an
+acceptance test for yours: set −150 dBm and confirm the meter reads exactly what it reads with
+no signal at all. If it doesn't, you have a leak.
+
+Three routes:
+1. **Buy a switched step attenuator.** Simplest; make sure it's a shielded box, not a bare PCB.
+2. **Chain fixed SMA/BNC pads** (20 dB + 20 dB + 10 dB + 10 dB + 6 dB + 3 dB…). Cheapest, and
+   the connections themselves are well shielded. Clumsy to sweep with.
+3. **Build a switched pi-pad in a die-cast box**, one compartment per section. Standard amateur
+   construction, and the compartmentalisation is what buys you the last 40 dB.
+
+### The second and third transceiver (Problems 34B, 35)
+
+Problem 34B reaches for a second NorCal 40A for a specific stated reason: function generators
+have limited low-end range and are hard to isolate at very low levels. A battery-powered source
+in a sealed box beats a mains-powered generator on both counts.
+
+**Build one or two small oscillator boxes**: an Si5351 or AD9850 module, a cell, a die-cast
+enclosure, one BNC out. For Problem 35 you need *two*, in *separate* boxes with *separate*
+supplies, because the whole measurement depends on the two sources not intermodulating with
+each other — which is also why the book insists on a power combiner rather than a tee, and why
+one two-channel generator is the worst option.
+
+Verify before you trust them, using the book's own test: halve the input and check that the
+third-order product drops by a factor of eight, not two. If it drops by two, you are measuring
+your source.
+
+### The antenna (Problems 34G, 36, 39)
+
+A half-wave dipole for 40 m is about 20 m of wire, cut in the middle, fed with coax. Wire, two
+end insulators, a centre insulator, and somewhere to hang it. It is the cheapest instrument in
+the book and three problems need it.
+
+Problem 34G's measurement — that atmospheric noise at 7 MHz exceeds the receiver's own noise —
+is the payoff for all of Chapter 14, and it needs nothing better than this.
 
 ---
 
@@ -517,6 +660,11 @@ JFET/FET follower rather than hanging an MCU pin off the tank.
 - **The 40B schematic, for Problem 13.** Not a purchase — it's Appendix D of a manual you
   already have — but the problem cannot be done correctly without knowing which end of an
   asymmetric filter faces the power amplifier.
+- **A 50 Ω load that can take 2.25 W**, from Problem 24 onward. A 0.5 W feedthrough terminator
+  drifts as it heats and then fails, and Problem 25 asks you to hold full output for twenty
+  minutes. There is no clever way around dissipating the power.
+- **An amateur licence, for Problem 36.** Receiving is unlicensed everywhere; transmitting is
+  not. This is the only legal prerequisite in the book, and the only problem that has one.
 - **Some way of reading 60 dB of dynamic range at 4.9 MHz** for Problem 14K. Scope averaging or
   an FFT may just get you there; a log detector definitely does. What you cannot do is read
   sub-millivolt signals off a scope screen and call it a measurement.
@@ -529,12 +677,12 @@ The order itself lives in **[shopping-list.md](shopping-list.md)**. This section
 *judgment calls* behind it — the things a parts audit says to buy that a junk box and a
 multimeter make unnecessary.
 
-**Skip if you own a resistor assortment:** the 510 Ω, 300 kΩ, 3 kΩ, 2 kΩ, 150 Ω, 200 Ω, 1 kΩ and
-1.5 kΩ. Every one is a standard E24 value, and a measured junk-box part beats an assumed nominal
+**Skip if you own a resistor assortment:** the 510 Ω, 300 kΩ, 3 kΩ, 2 kΩ, 150 Ω, 200 Ω, 1 kΩ,
+1.5 kΩ, 750 Ω, 2.2 kΩ and 5.6 Ω. Every one is a standard E24 value, and a measured junk-box part beats an assumed nominal
 one. Several of them (Problems 14–16) get soldered in and thrown away, so tolerance is doubly
 irrelevant.
 
-**Skip the capacitor assortment entirely.** Problems 1–16 need exactly one breadboard capacitor
+**Skip the capacitor assortment entirely.** The whole book needs exactly one breadboard capacitor
 value — 10 nF, in Problems 3 and 4. Everything else is on the radio board and ships in the kit.
 Buy five 10 nF film caps; the tolerance only matters if your DMM has no capacitance range.
 

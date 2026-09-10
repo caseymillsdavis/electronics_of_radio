@@ -5,9 +5,11 @@
 These are pulled straight out of the problem statements, not from a generic "good starter
 generator" list. Numbers in the table are what the problems actually ask for.
 
-Requirements 1–7 come from Problems 1–9 and were written before Chapters 4–6 arrived;
-**requirements 8–12 are the additions**, and one of them (pulse mode) can genuinely disqualify
-a generator that would otherwise have been fine.
+Requirements 1–7 come from Problems 1–9; **8–12 came with Chapters 4–6**, and one of them
+(pulse mode) can genuinely disqualify a generator that would otherwise have been fine.
+**13–15 came with Chapters 7–15** and are all mild — the later chapters ask far more of the
+*rest* of the bench than of the generator. See
+[what the later chapters need beyond a generator](#what-chapters-715-need-beyond-a-generator).
 
 | # | Requirement | Where it comes from |
 |---|---|---|
@@ -23,14 +25,64 @@ a generator that would otherwise have been fine.
 | **10** | **1 Hz frequency steps at 4.9 MHz**, and short-term stability well inside ~100 Hz over a session | P14A, P14C |
 | **11** | Usable and flat down to **~100 kHz** | P15C's 3-dB cut-off lands in the 250–700 kHz range |
 | **12** | Amplitude settings of 0.5, 1, 2, 5 and 10 Vpp | P16A/P14A (0.5), P12B (1), P14K (2), P15 (5), P13A (10) |
+| **13** | **DC offset**, independently settable, ~0.5 V to 2 V | P19A (1 kHz square, 0–8 V open circuit); P21 and P22 (7 MHz sine on a 0.5 V offset) |
+| **14** | Amplitude readout switchable to **Vrms** | P31–P33 compare against a true-RMS multimeter throughout; matching units removes a √2 from every gain calculation |
+| **15** | Down to **20 Hz square at 5 Vpp**, and audio sine 100 Hz–10 kHz | P20 and P30C key the transmitter at 10–20 Hz; P31D sweeps the audio amplifier |
 
-Requirements 9, 11 and 12 are free — anything meeting 1–7 already meets them. Requirement 10
-looks alarming and isn't (see below). **Requirement 8 is the one that can rule a generator
-out.**
+Requirements 9, 11, 12, 14 and 15 are free — anything meeting 1–7 already meets them.
+Requirement 10 looks alarming and isn't (see below). **Requirement 8 is the one that can rule a
+generator out**, and **requirement 13 is the one that quietly rules out the very cheapest
+modules**, which often have no offset control at all.
+
+Nice to have, and now slightly more attractive: a **noise output** with a specified bandwidth.
+Problem 34F uses one to find the receiver's noise-equivalent power, and explicitly frames it as
+optional ("A function generator that can produce noise is useful for..."). Nothing later
+depends on it.
 
 Nice to have, still not required: a second channel, frequency sweep (makes P8E's 1 MHz-interval
 sweep and the bandwidth hunts in P8C, P9C, P12D and P16A much less tedious), and a built-in
 frequency counter.
+
+### What Chapters 7–15 need beyond a generator
+
+The later chapters barely move the generator spec. What they do is add four other instruments,
+listed here so the whole bench requirement lives in one place. Purchase decisions and DIY routes
+are in [shopping-list.md](shopping-list.md) and
+[substitutions-and-workarounds.md](substitutions-and-workarounds.md).
+
+| Instrument | Spec the problems actually impose | First needed |
+|---|---|---|
+| **50 Ω load** | **≥ 2.5 W continuous** at 7 MHz. P24B and P30A run 30 Vpp into 50 Ω = 2.25 W; P25 holds it for twenty minutes. A 0.5 W feedthrough will not survive | P24 |
+| **Frequency counter** | ≥ 5 MHz. Fine resolution wanted at P29C; see the [reference-accuracy note](substitutions-and-workarounds.md) for why that is less demanding than it looks. Needs an input attenuator or filter to take the transmitter's 30 Vpp in P33 | P26 |
+| **Step attenuator** | 50 Ω, flat at 7 MHz, **≥ 80 dB in steps**, well shielded. P34 works down to −150 dBm, where leakage around the attenuator is the limit, not the attenuation through it | P33 |
+| **Power combiner** | 2-way, HF, **isolation > 20 dB**. Explicitly *not* a BNC tee — a tee lets two transmitters intermodulate each other, which is the thing being measured | P35 (only) |
+
+**Multimeter.** Already owned, but three properties get used deliberately rather than
+incidentally, and are worth confirming:
+
+- **True RMS**, for every audio and IF measurement from Problem 29 onward.
+- **Floating (isolated) inputs.** Problem 29 switches from the scope to the meter partly
+  because the meter won't short an output the way a grounded scope lead does, and Problem 31F
+  measures across a differential input for the same reason.
+- **An AC bandwidth that rolls off around 100 kHz.** Problem 29 *relies* on this: the meter
+  ignores the 10 MHz sum product and the higher-order junk, so it acts as a low-pass filter with
+  a display. Know roughly where yours gives up.
+
+**Oscilloscope.** Also owned; five features get called for by name across these chapters:
+
+| Feature | Where |
+|---|---|
+| **Bandwidth-limit / low-pass filter** | P16D (load-bearing — the generator's own harmonics fall in the passband), P28B |
+| **Trigger holdoff** | P30C, to kill duplicate traces on the keying envelope. Put it back to minimum afterwards |
+| **Trigger slope and level** | P19A/B, P30C |
+| **0.5 s/div timebase** | P33A. Trivial on a DSO — use roll mode |
+| **AC coupling** | P28B, P29 — the SA602 outputs sit ~1.2 V below the supply |
+
+**Two 10:1 probes at once**, with known capacitance, from Problem 22 onward. Problem 23's
+part D and Problem 16's Figure 6.10 both treat probe capacitance as a circuit element, so the
+number matters, not just the ratio.
+
+---
 
 ### Requirement 5 is the one to check first
 
@@ -108,7 +160,7 @@ of it.
 
 **Short-term stability is what actually matters.** The crystal dip is roughly 100–250 Hz wide
 (arithmetic in the
-[parts audit](problems-01-16-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims)),
+[parts audit](problems-01-39-parts-audit.md#appendix-arithmetic-behind-the-sufficiency-claims)),
 and you are comparing six crystals measured over perhaps an hour. If the generator drifts 100 Hz
 during that hour, your matching is fiction. Two free habits fix it:
 

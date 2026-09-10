@@ -81,7 +81,7 @@ All three gaps this file previously tracked are closed.
 
 **G1 — tail of Problem 16 — closed by batch 3 (pp. 128–130).** Parts B–G are all present, and
 p. 130 carries only part G followed by white space, so Chapter 6 ends there. The audit in
-[`../analysis/problems-01-16-parts-audit.md`](../analysis/problems-01-16-parts-audit.md) is no
+[`../analysis/problems-01-39-parts-audit.md`](../analysis/problems-01-39-parts-audit.md) is no
 longer provisional.
 
 **G2 — Problem 19 — closed by batch 3 (pp. 149–150).** p. 149 carries the chapter's

@@ -20,7 +20,7 @@ the goal.
 | [`reference/norcal-40b-parts-list.md`](reference/norcal-40b-parts-list.md) | Full 40B bill of materials, transcribed from the manual's image-only Appendix A so it's searchable/greppable. Includes suspected errata. |
 | [`reference/norcal-40b-vs-40a.md`](reference/norcal-40b-vs-40a.md) | How the 40B differs from the 40A where the book's problems touch the board — including the Problem 13 harmonic filter, where the values genuinely diverge. |
 | [`reference/source-page-coverage.md`](reference/source-page-coverage.md) | Which pages of the book have actually been captured, problem by problem, and the three known gaps. Check here before assuming a problem's text is on hand. |
-| [`analysis/problems-01-16-parts-audit.md`](analysis/problems-01-16-parts-audit.md) | **Main doc.** Every component each of Problems 1–16 needs, checked against the 40B kit. |
+| [`analysis/problems-01-39-parts-audit.md`](analysis/problems-01-39-parts-audit.md) | **Main doc.** Every component each of the book's 39 problems needs, checked against the 40B kit — plus the instruments, fixtures and one antenna the later chapters add. |
 | [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md) | How to run the problems without buying everything — substitute values, rescaled frequencies, MCU stand-ins, and what genuinely can't be faked. |
 | [`analysis/shopping-list.md`](analysis/shopping-list.md) | **Buying authority.** One consolidated, order-ready list of everything the exercises need, grouped by supplier cart, with tiers and bulk-buying notes for passives. |
 | [`analysis/bench-results.md`](analysis/bench-results.md) | **Results log.** Raw measurements and conclusions from problems actually worked at the bench. Contains worked answers — don't read ahead of where you are. |
@@ -60,14 +60,23 @@ cited in these notes refer to the printed page numbers in that PDF.
 
 ## Progress
 
-Problems 1–16 analysed, complete through the end of Chapter 6.
-
-**Source pages for the whole book are now on hand** and legible, with Problems 17–39 (Chapters
-7–15) not yet analysed. There are no outstanding capture gaps — the index is in
+**All 39 problems are analysed** — the whole book, Chapters 2 through 15. Source pages for
+every problem are on hand with no outstanding capture gaps; the index is in
 [`reference/source-page-coverage.md`](reference/source-page-coverage.md).
 
-The book has **39 problems, not 40**; an earlier note here said 40. See the coverage doc for how
-that was settled.
+The remaining work is at the bench, not in the analysis. The tracker's **Bench** column is what
+is still empty.
+
+Two things worth knowing before starting Chapters 7–15:
+
+- **The 40B kit has every board component Problems 19–33 install.** But six places differ from
+  the book in ways that change a number you're asked to calculate — most importantly the power
+  amplifier transistor, whose thermal resistance is a *given* in Problem 25. They're summarised
+  in [`reference/norcal-40b-vs-40a.md`](reference/norcal-40b-vs-40a.md) and flagged ⚠️ in the
+  tracker.
+- **The cost of the later chapters is instruments, not parts** — a 2.5 W 50 Ω load, a frequency
+  counter, and an 80 dB step attenuator, plus an antenna. Several have MCU or home-built
+  substitutes; see [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md).
 
 Bench work has started: **Problem 2 is worked**, results in
 [`analysis/bench-results.md`](analysis/bench-results.md). The tracker lives in
