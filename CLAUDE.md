@@ -8,10 +8,13 @@ Radio*** (Cambridge University Press). The book is a lab course: **40 problems**
 
 ## Two standing facts about how work arrives here
 
-1. **The book is 40 problems long and they arrive incrementally.** The owner photographs
-   pages and uploads them a few problems at a time. As of the last update, **Problems 1–16
+1. **The book is 40 problems long and they arrive incrementally.** The owner photographs or
+   scans pages and uploads them a few problems at a time. As of the last update, **Problems 1–16
    have been analysed** (see the tracker below), and Problem 16 only partly — its pages run
-   past what was uploaded. When new screenshots appear, extend the existing
+   past what was uploaded. **Source pages for Problems 17–39 are now on hand but unanalysed**;
+   which pages exist, and the three that don't, are indexed in
+   [`reference/source-page-coverage.md`](reference/source-page-coverage.md) — check it before
+   assuming a problem's text is available. When new pages appear, extend the existing
    docs rather than starting parallel ones — the per-problem tables and the shopping list are
    meant to grow. **Analysing a new problem is not finished until its parts are reflected in
    [`analysis/shopping-list.md`](analysis/shopping-list.md)** — see the convention below.
@@ -130,6 +133,7 @@ CLAUDE.md                              this file
 README.md                              orientation and index
 reference/   norcal-40b-parts-list.md  transcribed 40B BOM + suspected errata
              norcal-40b-vs-40a.md      where the 40B differs from the book's radio
+             source-page-coverage.md   which book pages we hold, and the known gaps
 analysis/    problems-01-16-parts-audit.md   per-problem component audit
              substitutions-and-workarounds.md  how to avoid buying things
              shopping-list.md          consolidated order-ready list — the buying authority
@@ -168,10 +172,35 @@ it came from.
 | 14 | 5 Filters | IF filter | **yes** — X1–X4, C9–C13, L4, C14 | ✅ | ⬜ |
 | 15 | 6 Transformers | Driver transformer | **yes** — T1, R14 | ✅ | ⬜ |
 | 16 | 6 Transformers | Tuned transformers | **yes** — T2, T3, C2, C4 | 🟡 pages incomplete | ⬜ |
-| 17–40 | — | not yet uploaded | — | ⬜ | — |
+| 17 | 7 Acoustics | Tuned speaker | no | ⬜ | — |
+| 18 | 7 Acoustics | Acoustic standing-wave ratio | no | ⬜ | — |
+| 19 | 8 Transistor switches | Receiver switch | **yes** | ⬜ ⚠️ source pages missing | — |
+| 20 | 8 Transistor switches | Transmitter switch | **yes** — Q4, R24, R9, D11, C57, J3 | ⬜ | — |
+| 21 | 9 Transistor amplifiers | Driver amplifier | **yes** — R13, C56, D10, R11 | ⬜ | — |
+| 22 | 9 Transistor amplifiers | Emitter degeneration | **yes** | ⬜ | — |
+| 23 | 9 Transistor amplifiers | Buffer amplifier | **yes** | ⬜ | — |
+| 24 | 10 Power amplifiers | Power amplifier | **yes** | ⬜ | — |
+| 25 | 10 Power amplifiers | Thermal modeling | **yes** — D12 | ⬜ | — |
+| 26 | 11 Oscillators | VFO | **yes** — L9, C51, C52, C53, D8 | ⬜ | — |
+| 27 | 11 Oscillators | Gain limiting | **yes** | ⬜ | — |
+| 28 | 12 Mixers | RF mixer | **yes** — U1 (SA602AN) | ⬜ | — |
+| 29 | 12 Mixers | Product detector | **yes** | ⬜ | — |
+| 30 | 12 Mixers | Transmit mixer | **yes** | ⬜ | — |
+| 31 | 13 Audio circuits | Audio amplifier | **yes** | ⬜ | — |
+| 32 | 13 Audio circuits | Automatic gain control | **yes** — C55, R22, C22, R7 | ⬜ | — |
+| 33 | 13 Audio circuits | Alignment | **yes** — whole radio | ⬜ | — |
+| 34 | 14 Noise and intermodulation | Receiver response | **yes** — whole radio | ⬜ | — |
+| 35 | 14 Noise and intermodulation | Intermodulation | **yes** — whole radio | ⬜ | — |
+| 36 | 14 Noise and intermodulation | Demonstration | **yes** — whole radio | ⬜ | — |
+| 37 | 15 Antennas and propagation | Antennas | no | ⬜ | — |
+| 38 | 15 Antennas and propagation | Propagation | no | ⬜ | — |
+| 39 | 15 Antennas and propagation | Listening | **yes** — whole radio | ⬜ | — |
+| 40 | ? | ? | ? | ⬜ ⚠️ source pages missing | — |
 
 **Analysed** = notes written here. **Bench** = actually built and measured, with results in
-[`analysis/bench-results.md`](analysis/bench-results.md).
+[`analysis/bench-results.md`](analysis/bench-results.md). Board-work and title columns for
+17–39 are read off the scanned pages, not yet audited against the 40B — treat them as a
+starting point for the audit, not a conclusion.
 
 ## Git
 

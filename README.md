@@ -19,6 +19,7 @@ the goal.
 |---|---|
 | [`reference/norcal-40b-parts-list.md`](reference/norcal-40b-parts-list.md) | Full 40B bill of materials, transcribed from the manual's image-only Appendix A so it's searchable/greppable. Includes suspected errata. |
 | [`reference/norcal-40b-vs-40a.md`](reference/norcal-40b-vs-40a.md) | How the 40B differs from the 40A where the book's problems touch the board — including the Problem 13 harmonic filter, where the values genuinely diverge. |
+| [`reference/source-page-coverage.md`](reference/source-page-coverage.md) | Which pages of the book have actually been captured, problem by problem, and the three known gaps. Check here before assuming a problem's text is on hand. |
 | [`analysis/problems-01-16-parts-audit.md`](analysis/problems-01-16-parts-audit.md) | **Main doc.** Every component each of Problems 1–16 needs, checked against the 40B kit. |
 | [`analysis/substitutions-and-workarounds.md`](analysis/substitutions-and-workarounds.md) | How to run the problems without buying everything — substitute values, rescaled frequencies, MCU stand-ins, and what genuinely can't be faked. |
 | [`analysis/shopping-list.md`](analysis/shopping-list.md) | **Buying authority.** One consolidated, order-ready list of everything the exercises need, grouped by supplier cart, with tiers and bulk-buying notes for passives. |
@@ -61,6 +62,11 @@ cited in these notes refer to the printed page numbers in that PDF.
 
 Problems 1–16 analysed — Chapter 4 (transmission lines), Chapter 5 (filters) and the first two
 transformer problems of Chapter 6. Problem 16 is analysed only as far as the uploaded pages go.
+
+**Source pages for Problems 17–39 have arrived** (Chapters 7–15) and are legible, but nothing
+from them is analysed yet. Three gaps are outstanding: the tail of Problem 16, the start of
+Problem 19, and all of Problem 40 — details and what to rescan in
+[`reference/source-page-coverage.md`](reference/source-page-coverage.md).
 
 Bench work has started: **Problem 2 is worked**, results in
 [`analysis/bench-results.md`](analysis/bench-results.md). The tracker lives in
