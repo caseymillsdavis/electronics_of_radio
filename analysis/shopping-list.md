@@ -102,6 +102,13 @@ instead, and let one question decide the tolerance:
   Problems 3C and 3D compare measured against calculated, and a ±20% ceramic disc puts a 20%
   unknown right in the middle of the comparison.
 
+It doesn't have to be 10 nF, either. **Anything from roughly 1 nF up works, measured**, as long
+as you scale with it: Problem 3 absorbs the change in the generator frequency, Problem 4 in `R`.
+The rule and the arithmetic are
+[in the workarounds doc](substitutions-and-workarounds.md#problem-3-if-your-capacitor-isnt-10-nf-scale-the-frequency-not-r).
+Below ~2 nF, start zeroing the DMM's test leads before you trust a reading, and measure through
+the 10:1 probe rather than a bare coax lead.
+
 If you want to stock the junk box anyway, a film/polyester kit is the useful kind. **NP0/C0G**
 ceramics are the ones that matter for RF tuned circuits later; general-purpose discs
 (X7R, Y5V) drift with temperature and voltage and are the wrong part for anything resonant.
@@ -119,7 +126,7 @@ Passives, semis, and the small stuff. One DigiKey/Mouser/Farnell order, or Amazo
 | ☐ | Part | Qty | Tier | What it's for |
 |---|---|---|---|---|
 | ☐ | 1% metal-film resistor assortment, E24, 10 Ω–1 MΩ | 1 kit | 1 | Every resistor in P1–16 (see above) |
-| ☐ | 10 nF film capacitor, 5% | 5 | 1 | P3, P4 — the only breadboard cap. 5% only matters if your DMM can't measure C |
+| ☐ | 10 nF film capacitor, 5% | 5 | **3** | P3, P4 — the only breadboard cap. Demoted from Tier 1: **any measured cap from ~1 nF up now works**, by scaling P3's frequency and P4's `R` ([how](substitutions-and-workarounds.md#problem-3-if-your-capacitor-isnt-10-nf-scale-the-frequency-not-r)). Buy it to keep the book's own numbers; 5% only matters if your DMM can't measure C |
 | ☐ | 1N4148 diode | 10 | 1 | P4 detector, P6 snubber |
 | ☐ | P2N2222A or PN2222A, **TO-92** | 5 | 1 | P5 switch, P6. **Sacrificial** — the experiment makes spikes that kill them. Don't substitute the kit's TO-18 Q6; different pinout, and it's spoken for |
 | ☐ | 1 mH moulded choke | 3 | 1 | P5, P6 — also consumable |

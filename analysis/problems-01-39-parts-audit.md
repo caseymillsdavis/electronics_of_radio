@@ -154,6 +154,13 @@ start rather than mid-problem. The delays you're chasing run from milliseconds (
 the 10 nF fitted) down to a few microseconds (part J, probe only) — no bandwidth challenge
 for a decent scope, but you do need a probe whose marked capacitance you trust.
 
+**Neither value is sacred, but they are not equally free.** `R` is shared with parts E–K,
+which measure stray capacitance with the capacitor removed — so `R` should stay near 300 kΩ
+whatever capacitor you have, and a non-10 nF cap gets absorbed by changing the generator
+frequency instead. Problem 4 is the opposite case and has to absorb it in `R`. Both are worked
+out in
+[the workarounds doc](substitutions-and-workarounds.md#problem-3-if-your-capacitor-isnt-10-nf-scale-the-frequency-not-r).
+
 Note the explicit instruction *"Do not use a breadboard, because it adds capacitance that
 confuses the measurements."* This one is built in free air on the component leads with test
 hooks, so you need **BNC-to-minigrabber leads**, not just BNC-to-BNC coax.

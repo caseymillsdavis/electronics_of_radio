@@ -129,16 +129,79 @@ the other direction.
 
 | Book calls for | Substitute | Why it's fine |
 |---|---|---|
-| 300 kΩ (P3) | 2 × 150 kΩ in series, 3 × 100 kΩ, or one 330 kΩ | Sets `τ` with C, and appears in a divider with the scope's 1 MΩ. Any value in the 100 kΩ–1 MΩ range works; just measure it and use the measured number. Staying well above 50 Ω and well below 1 MΩ keeps the book's two simplifications (ignore the generator's 50 Ω, don't swamp the scope) valid. |
+| 300 kΩ (P3) | 2 × 150 kΩ in series, 3 × 100 kΩ, or one 330 kΩ | Sets `τ` with C, and appears in a divider with the scope's 1 MΩ. Any value in the 100 kΩ–1 MΩ range works; just measure it and use the measured number. Staying well above 50 Ω and well below 1 MΩ keeps the book's two simplifications (ignore the generator's 50 Ω, don't swamp the scope) valid. **Don't rescale this to compensate for a different capacitor** — see below. |
 | 3.0 kΩ (P4) | **3.3 kΩ** | E12 standard. Changes `τ` from 30 µs to 33 µs, which changes nothing — see the ratio note below. |
 | 2 × 2 kΩ (P5, P6) | 1.8 kΩ or 2.2 kΩ | One limits base current, one is the collector load. Neither value is critical; the switch saturates either way. |
 | 4 × 510 Ω (P2) | Any four roughly-equal resistors, 400–600 Ω | Measure each. They don't even need to match — you're computing total current, so unequal values just mean summing conductances. |
-| 10 nF (P3, P4) | Any 0.01 µF you have | **The one place to be careful.** Ceramic discs run ±10–20%, and Problems 3C/3D compare measured against calculated. If your DMM has a capacitance range, measure it and the tolerance stops mattering. If it doesn't, buy a 5% film cap — it's pennies and removes a 20% unknown from the answer. |
+| 10 nF (P3, P4) | Any 0.01 µF you have, or anything from ~1 nF up if you scale to suit | **The one place to be careful.** Ceramic discs run ±10–20%, and Problems 3C/3D compare measured against calculated. If your DMM has a capacitance range, measure it and the tolerance stops mattering. If it doesn't, buy a 5% film cap — it's pennies and removes a 20% unknown from the answer. The value itself is free in P3 and constrained in P4 — see the two sections below. |
 | 1 mH choke (P5, P6) | Any 100 µH–10 mH inductor | `τ = L/R`; pick the square-wave frequency so `τ` is much shorter than a half-period and the measurement is identical. Do note the DC resistance (~10 Ω for a 1 mH molded part) and include it in R. |
 | P2N2222A (P5, P6) | 2N3904, BC547, almost any TO-92 NPN rated ≥ 40 V | Vceo matters here — the inductive spike is deliberately large, and the transistor's breakdown is part of what limits it. Buy a handful of whatever you choose; these are consumable in this experiment. |
 | 1N4148 (P4, P6) | Any silicon small-signal diode | Problem 4B's expected answer is a silicon forward drop. A Schottky or germanium changes that number — interesting, but know you've changed it. |
 | Non-metallic tuning tool (P8) | A metal driver, used carefully | Adjust, withdraw the driver, *then* read the scope. Your hand and the driver add capacitance that shifts resonance while you're touching it. Tedious but workable. |
 | 50 Ω feedthrough terminator (P5) | A 51 Ω resistor at the scope input | Fine at 1 kHz. **Not** fine for Problem 8 at 7–15 MHz, where lead inductance stops being negligible. Buy the real terminator before Problem 8. |
+
+### Problem 3: if your capacitor isn't 10 nF, scale the *frequency*, not `R`
+
+`R` is the one value in Problem 3 that is shared between the parts that use the capacitor and
+the parts that don't. Parts E–K pull the capacitor out and measure the stray capacitance of the
+scope, the cable and the probe — so whatever `R` you pick sets those microsecond delays too.
+Rescaling `R` to hold `τ` at the book's value drags all of them along with it, and pushes `R`
+up toward the scope's input resistance, where the book's "ignore the scope's loading"
+simplification starts to cost you real accuracy.
+
+The square-wave frequency has no such second job. It is there only to make `τ` a visible,
+fully-settled fraction of a half-period. So when the capacitor isn't 10 nF:
+
+- **Leave `R` at 300 kΩ** — or at whatever junk-box value near it you have measured.
+- **Scale the generator frequency by the same factor as the capacitor** if you want the book's
+  on-screen picture: a visible exponential *and* a settled flat top in one frame.
+- Or leave the generator at 20 Hz and zoom the timebase in. The measurement is identical — you
+  just can't see the whole square wave and the exponential at the same time.
+
+**The one real cost of a smaller capacitor is that stray capacitance stops being negligible.**
+At 10 nF, a metre of BNC coax hanging on the node is a ~1% error you can ignore. Below about
+2 nF it is several percent, sitting right in the middle of the measured-vs-calculated
+comparison that parts C and D are built on. Take that measurement through the **10:1 probe**,
+not a bare coax lead — or add the lead's capacitance to the calculated value. Parts E–K hand
+you that number anyway.
+
+Same hazard one step earlier, at the meter: **zero the test leads (REL/ZERO) before measuring a
+capacitor in the low-nF range.** A lead pair is tens of pF. That was 1% of 10 nF; it is a few
+percent of 2 nF, and it reads *high*, which looks exactly like a cap that's in tolerance.
+
+<details>
+<summary>⚠️ Worked numbers for a measured 1.87 nF part — contains Problem 3C's calculated answer</summary>
+
+Keeping `R` = 300 kΩ:
+
+| | Book | 1.87 nF |
+|---|---|---|
+| `τ = RC` | 3.00 ms | **561 µs** |
+| Half-period at 20 Hz | 25 ms = 8.3 `τ` | 25 ms = 44.6 `τ` |
+| Frequency for the book's ratio | 20 Hz | **3.74 Hz** — call it 4 Hz |
+
+44.6 `τ` is settled to well under a part per million, so nothing is wrong with the
+measurement at 20 Hz; the exponential is just a sliver at the edge of the screen. Roughly
+100–200 µs/div gets you a full curve. Either way the scope must be **DC-coupled** — AC
+coupling's ~10 Hz corner mangles a 20 Hz square wave and destroys a 4 Hz one.
+
+Why not hold `τ` at 3 ms by raising `R` to 1.60 MΩ instead:
+
+| | 300 kΩ | 1.60 MΩ |
+|---|---|---|
+| Loading by a 10 MΩ 10:1 probe | −2.9% | **−13.8%** |
+| Loading straight into a 1 MΩ input | −23% | −62% |
+| Part J's probe-only delay (10 pF) | ~3 µs | ~16 µs |
+
+The −13.8% is an error on both the amplitude *and* `τ`, and it propagates into every stray-C
+number in parts E–K. 4 Hz on a generator dial costs nothing and introduces no error at all.
+
+Stray capacitance, for scale: 120 pF of coax lead is **6.4%** of 1.87 nF against 1.2% of 10 nF;
+a 10 pF probe is 0.53%.
+
+</details>
+
+---
 
 ### Problem 4 is about ratios, not frequencies
 
@@ -164,6 +227,13 @@ lands at `τ / T_carrier = 3`, which is where the droop becomes visible.
 
 This is also why 3.3 kΩ instead of 3.0 kΩ is a non-event: 33 µs sits in the same place
 between the same two timescales.
+
+**But it is also why a different capacitor is *not* a non-event here, unlike in Problem 3.**
+Problem 3 lets you absorb a smaller cap in the generator frequency; Problem 4 pins the carrier,
+so the cap has to be absorbed in `R`. Keep `τ` where the book put it and scale `R` inversely:
+a measured **1.87 nF** wants **16 kΩ** (E24, in the assortment) rather than 3.0 kΩ, which
+would otherwise give `τ` = 5.6 µs — only 5.6 carrier periods, where the detector starts
+following the carrier instead of the envelope and part A stops showing what it's meant to show.
 
 ---
 
